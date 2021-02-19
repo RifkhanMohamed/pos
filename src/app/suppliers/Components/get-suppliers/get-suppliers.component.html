@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="Content-wrapper">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-primary" data-target="#supplierModal" data-toggle="modal">Add New</button>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control-sm form-control" [(ngModel)]="searchText"  placeholder="Search" >
+                    </div>
+                </div>        
+<br>
+            </div>
+        </div>
+    </div>
+<br>
+    <div class="row jumbotron">
+        <div class="col-sm-12">
+            <div *ngIf="this.getAllSuppliers.length>0">
+                Hello
+            </div>
+            <div *ngIf="this.getAllSuppliers.length==0">
+                <h1 class="text-center">No Results Found</h1>
+            </div>
+        </div>
+    </div>
+</div>

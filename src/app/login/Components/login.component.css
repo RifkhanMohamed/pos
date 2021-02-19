@@ -1,0 +1,38 @@
+.heading{
+    font-size: large;
+}
+
+.logo{
+    -webkit-box-shadow: 0px 0px 150px #459BBCBF;
+    box-shadow: 0px 0px 150px #459BBCBF;
+opacity: 1;
+}
+
+.astric{
+    color: red;
+    font-size: large;
+    font-weight: bold;
+}
+
+h3{
+    font-weight: bold;
+}
+
+.check {
+    float: left;
+    margin-right: 5px;;
+    margin-left: 5px;
+    margin-top: 5px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .btn-continue {
+    -webkit-box-shadow: 0px 0px 20px #459bbc4a !important;
+            box-shadow: 0px 0px 20px #459bbc4a !important;
+    border-radius: 10px !important;
+    opacity: 1;
+    min-width: 100px;
+    background: #45e67b 0% 0% no-repeat padding-box !important;
+    color: #000000 !important;
+  }
