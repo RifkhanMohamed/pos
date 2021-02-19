@@ -1,0 +1,339 @@
+<div class="container">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="jumbotron">
+                <h1 style="text-align: center;">Add New Products</h1>
+                    <form action="" name="form" [formGroup]="form">
+                        <div class="form-group">
+                            <label for="productCode">Product Code</label>
+                            <input type="text" class="form-control" formControlName="productCode"  [ngClass]="{'is-invalid':form.get('productCode').touched && form.get('productCode').invalid}">
+                            <div *ngIf="form.get('productCode').touched&&form.get('productCode').invalid" class="invalid-feedback">
+                                <div *ngIf="form.get('productCode').errors.required" >Product Code is required</div>
+                                <div *ngIf="form.get('productCode').errors.productCodeIsNotAllowed" >Product Code must be uniqueness</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" class="form-control" formControlName="productName" [ngClass]="{'is-invalid':form.get('productName').touched && form.get('productName').invalid}">
+                            <div class="invalid-feedback">
+                                <div>Product Name is required</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDes">Product Description</label>
+                            <input type="text" class="form-control" formControlName="productDes">
+                        </div>
+                        <div class="form-group">
+                            <label for="productQuantity">Product Quantity</label>
+                            <input type="text" class="form-control" formControlName="productQuantity" [ngClass]="{'is-invalid':form.get('productQuantity').touched&&form.get('productQuantity').invalid}">
+                            <div *ngIf="form.get('productQuantity').touched&&form.get('productQuantity').invalid" class="invalid-feedback">
+                                <div *ngIf="form.get('productQuantity').errors.required" >Quantity is required</div>
+                                <div *ngIf="form.get('productQuantity').errors.numeric" >Quantity must be a numaric value</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="costPrice">Cost Price</label>
+                            <input type="text" class="form-control" formControlName="costPrice" [ngClass]="{'is-invalid':form.get('costPrice').touched&&form.get('costPrice').invalid}">
+                            <div *ngIf="form.get('costPrice').touched&&form.get('costPrice').invalid" class="invalid-feedback">
+                                <div *ngIf="form.get('costPrice').errors.required" >Cost Price is required</div>
+                                <div *ngIf="form.get('costPrice').errors.numeric" >Cost Price must be a currency format</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price</label>
+                            <input type="text" class="form-control" formControlName="price" [ngClass]="{'is-invalid':form.get('price').touched&&form.get('price').invalid}">
+                            <div *ngIf="form.get('price').touched&&form.get('price').invalid" class="invalid-feedback">
+                                <div *ngIf="form.get('price').errors.required">Price is required</div>
+                                <div *ngIf="form.get('price').errors.numeric">Price must be a currency format</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productGuarantee">Product Guarantee</label>
+                            <input type="text" class="form-control" formControlName="productGuarantee">
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Product Category</label>
+                            <div class="row">
+                                <div class="col-9">
+                                    <select  name="" id="" class="form-control" formControlName="productCategory">
+                                        <option *ngFor="let category of getAllCategories" value={{category.cateId}}>{{category.cateName}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" data-target="#categoryModal" data-toggle="modal">Add New Category</button>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="form-group">
+                            <label for="productBrand">Product Brand</label>
+                            <div class="row">
+                                <div class="col-9">
+                                    <select  name="" id="" class="form-control" formControlName="productBrand">
+                                        <option *ngFor="let brand of getAllBrands" value={{brand.brandId}}>{{brand.brandName}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" data-target="#brandModal" data-toggle="modal">&nbsp;&nbsp;&nbsp;Add New Brand&nbsp;&nbsp;&nbsp;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productBranch">Product Branch</label>
+                            <div class="row">
+                                <div class="col-9">
+                                    <select  name="" id="" class="form-control" formControlName="productBranch">
+                                        <option *ngFor="let branch of getAllBranches" value={{branch.branchId}}>{{branch.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" data-target="#branchModal" data-toggle="modal">&nbsp;&nbsp;Add New Branch&nbsp;&nbsp;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productSupplier">Product Supplier</label>
+                            <div class="row">
+                                <div class="col-9">
+                                    <select  name="" id="" class="form-control" formControlName="productSupplier">
+                                        <option *ngFor="let supplier of getAllSuppliers" value={{supplier.supplierId}}>{{supplier.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-primary" data-target="#supplierModal" data-toggle="modal">&nbsp;Add New Supplier&nbsp;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" [disabled]="!form.valid" (click)="createNewProduct()">Add New</button>
+                            &nbsp;<button class="btn btn-secondary" (click)="onReset()">Reset</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Category Modal -->
+  <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content">
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form action="" name="categoryForm" [formGroup]="categoryForm">
+                <div class="form-group">
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" class="form-control" formControlName="categoryName"  [ngClass]="{'is-invalid':categoryForm.get('categoryName').touched && categoryForm.get('categoryName').invalid}">
+                    <div *ngIf="categoryForm.get('categoryName').touched&&categoryForm.get('categoryName').invalid" class="invalid-feedback">
+                        <div *ngIf="categoryForm.get('categoryName').errors.required" >Category Name is required</div>
+                        <div *ngIf="categoryForm.get('categoryName').errors.categoryNameIsNotAllowed" >Category Name must be uniqueness</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+  
+    <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div class="form-group">
+                <button class="btn btn-primary" [disabled]="!categoryForm.valid" (click)="createNewCategory()">Add New</button>
+                &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Brand Modal -->
+    <div class="modal fade" id="brandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="brandForm" [formGroup]="brandForm">
+                    <div class="form-group">
+                        <label for="brandName">Brand Name</label>
+                        <input type="text" class="form-control" formControlName="brandName"  [ngClass]="{'is-invalid':brandForm.get('brandName').touched && brandForm.get('brandName').invalid}">
+                        <div *ngIf="brandForm.get('brandName').touched&&brandForm.get('brandName').invalid" class="invalid-feedback">
+                            <div *ngIf="brandForm.get('brandName').errors.required" >Brand Name is required</div>
+                            <div *ngIf="brandForm.get('brandName').errors.brandNameIsNotAllowed" >Brand Name must be uniqueness</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!brandForm.valid" (click)="createNewBrand()">Add New</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Supplier Modal -->
+    <div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="supplierForm" [formGroup]="supplierForm">
+                    <div class="form-group">
+                        <label for="supplierName">Supplier Name</label>
+                        <input type="text" class="form-control" formControlName="supplierName" [ngClass]="{'is-invalid':supplierForm.get('supplierName').touched && supplierForm.get('supplierName').invalid}">
+                        <div class="invalid-feedback">
+                            <div>Supplier Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierAddress">Supplier Address</label>
+                        <input type="text" class="form-control" formControlName="supplierAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierTelNo">Supplier Phone Number</label>
+                        <input type="text" class="form-control" formControlName="supplierTelNo"  [ngClass]="{'is-invalid':supplierForm.get('supplierTelNo').touched && supplierForm.get('supplierTelNo').invalid}">
+                        <div *ngIf="supplierForm.get('supplierTelNo').touched&&supplierForm.get('supplierTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="supplierForm.get('supplierTelNo').errors.required" >Supplier Phone Number is required</div>
+                            <div *ngIf="supplierForm.get('supplierTelNo').errors.supplierTelNoIsNotAllowed" >Phone Number must be uniqueness</div>
+                            <div *ngIf="supplierForm.get('supplierTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierEmail">Supplier Email</label>
+                        <input type="text" class="form-control" formControlName="supplierEmail"  [ngClass]="{'is-invalid':supplierForm.get('supplierEmail').touched && supplierForm.get('supplierEmail').invalid}">
+                        <div *ngIf="supplierForm.get('supplierEmail').touched&&supplierForm.get('supplierEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="supplierForm.get('supplierEmail').errors.required" >Supplier Email is required</div>
+                            <div *ngIf="supplierForm.get('supplierEmail').errors.supplierEmailIsNotAllowed" >Email must be uniqueness</div>
+                            <div *ngIf="supplierForm.get('supplierEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierFaxNo">Supplier Fax Number</label>
+                        <input type="text" class="form-control" formControlName="supplierFaxNo">
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!supplierForm.valid" (click)="createNewSupplier()">Add New</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="branchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="branchForm" [formGroup]="branchForm">
+                    <div class="form-group">
+                        <label for="branchUnit">Branch Unit</label>
+                        <div class="row">
+                            <div class="col-8">
+                                <!-- <select  name="" id="" class="form-control" formControlName="branchUnit">
+                                    <option *ngFor="let unit of getAllUnits" value={{unit.unitId}}>{{unit.name}}</option>
+                                </select> -->
+                                <tag-input [(ngModel)]="unitsValues" [ngModelOptions]="{standalone: true}"  [removable]='true' placeholder="" [clearOnBlur]="true" secondaryPlaceholder="Enter Units..." clearOnBlur="true" [onlyFromAutocomplete]="true">
+                                    
+                                        <tag-input-dropdown [showDropdownIfEmpty]="true" [appendToBody]="false"  [autocompleteItems]="allUnitName" ></tag-input-dropdown>
+                                   
+                                </tag-input>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-primary" data-target="#unitModal" data-toggle="modal">Add New Unit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchName">Branch Name</label>
+                        <input type="text" class="form-control" formControlName="branchName" [ngClass]="{'is-invalid':branchForm.get('branchName').touched && branchForm.get('branchName').invalid}">
+                        <div *ngIf="branchForm.get('branchName').touched&&branchForm.get('branchName').invalid" class="invalid-feedback">
+                            <div *ngIf="branchForm.get('branchName').errors.required" >Branch Name is required</div>
+                            <div *ngIf="branchForm.get('branchName').errors.branchNameIsNotAllowed" >Branch Name must be uniqueness</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchAddress">Branch Address</label>
+                        <input type="text" class="form-control" formControlName="branchAddress">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="branchTelNo">Branch Phone Number</label>
+                        <input type="text" class="form-control" formControlName="branchTelNo"  [ngClass]="{'is-invalid':branchForm.get('branchTelNo').touched && branchForm.get('branchTelNo').invalid}">
+                        <div *ngIf="branchForm.get('branchTelNo').touched&&branchForm.get('branchTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="branchForm.get('branchTelNo').errors.required" >Branch Phone Number is required</div>
+                            <div *ngIf="branchForm.get('branchTelNo').errors.branchTelNoIsNotAllowed" >Phone Number must be uniqueness</div>
+                            <div *ngIf="branchForm.get('branchTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchEmail">Branch Email</label>
+                        <input type="text" class="form-control" formControlName="branchEmail"  [ngClass]="{'is-invalid':branchForm.get('branchEmail').touched && branchForm.get('branchEmail').invalid}">
+                        <div *ngIf="branchForm.get('branchEmail').touched&&branchForm.get('branchEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="branchForm.get('branchEmail').errors.required" >Branch Email is required</div>
+                            <div *ngIf="branchForm.get('branchEmail').errors.branchEmailIsNotAllowed" >Email must be uniqueness</div>
+                            <div *ngIf="branchForm.get('branchEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchFaxNo">Branch Fax Number</label>
+                        <input type="text" class="form-control" formControlName="branchFaxNo">
+                    </div>
+    
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!branchForm.valid" (click)="createNewBranch()">Add New</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      
+  <!-- Unit Modal -->
+  <div class="modal fade" id="unitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content">
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form action="" name="unitForm" [formGroup]="unitForm">
+                <div class="form-group">
+                    <label for="unitName">Unit Name</label>
+                    <input type="text" class="form-control" formControlName="unitName"  [ngClass]="{'is-invalid':unitForm.get('unitName').touched && unitForm.get('unitName').invalid}">
+                    <div *ngIf="unitForm.get('unitName').touched&&unitForm.get('unitName').invalid" class="invalid-feedback">
+                        <div *ngIf="unitForm.get('unitName').errors.required" >Unit Name is required</div>
+                        <div *ngIf="unitForm.get('unitName').errors.unitNameIsNotAllowed" >Unit Name must be uniqueness</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+  
+    <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div class="form-group">
+                <button class="btn btn-primary" [disabled]="!unitForm.valid" (click)="createNewUnit()">Add New</button>
+                &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
