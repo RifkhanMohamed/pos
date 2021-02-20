@@ -13,6 +13,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import { TagInputModule } from 'ngx-chips';
+import { authInterceptorProviders } from "src/app/_helpers/auth.interceptor";
 const routes: Routes = [
   {
     path: '',
@@ -40,6 +41,10 @@ const routes: Routes = [
     MatPaginatorModule,
     MatSortModule,
     TagInputModule
+  ],
+  providers :
+  [
+    authInterceptorProviders
   ]
 })
 export class BranchesModule { }

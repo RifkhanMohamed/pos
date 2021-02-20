@@ -15,17 +15,17 @@ export class ProductsService {
   constructor(private http: HttpClient) { console.log(this.url);
   }
 
-  getAllProducts(){
-    return this.http.get(this.GetAllProducts);
+  getAllProducts(): Observable<any>{
+    return this.http.get<any>(this.GetAllProducts);
   }
 
-  createProduct(body){
-    return this.http.post(`${this.CreateProduct}`,body)
+  createProduct(body): Observable<any>{
+    return this.http.post<any>(`${this.CreateProduct}`,body)
   }
   // deleteProduct(productId): Observable<any[]> {
   //   return this.http.get<any[]>(this.DeleteProduct + `${productId}`);
   // }
   deleteProduct(productId): Observable<any> {
-    return this.http.post(`${this.DeleteProduct}${productId}`, {responseType: 'text'});
+    return this.http.post<any>(`${this.DeleteProduct}${productId}`, {responseType: 'text'});
   }
 }

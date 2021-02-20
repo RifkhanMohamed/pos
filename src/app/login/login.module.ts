@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from "./Components/login.component";
+import { authInterceptorProviders } from 'src/app/_helpers/auth.interceptor';
 
 const routes: Routes = [
   {
@@ -20,6 +21,9 @@ const routes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule
+  ],
+  providers:[
+    authInterceptorProviders
   ]
 })
 export class LoginModule { }

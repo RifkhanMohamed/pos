@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { TagInputModule } from 'ngx-chips';
+import { authInterceptorProviders } from "src/app/_helpers/auth.interceptor";
 
 const routes: Routes = [
   {
@@ -53,6 +54,6 @@ const routes: Routes = [
     RxReactiveFormsModule,
     TagInputModule
   ],
-  providers:[CurrencyPipe]
+  providers:[CurrencyPipe,authInterceptorProviders]
 })
 export class ProductsModule { }

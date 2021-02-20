@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../../environments/environment";
+import { Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,10 +13,10 @@ export class CategoriesService {
 
   constructor(private http: HttpClient) { }
 
-  getAllCategories(){
-    return this.http.get(this.GetAllCategories);
+  getAllCategories(): Observable<any>{
+    return this.http.get<any>(`${this.GetAllCategories}`);
   }
-  createCategory(body){
-    return this.http.post(`${this.CreateCategory}`,body);
+  createCategory(body): Observable<any>{
+    return this.http.post<any>(`${this.CreateCategory}`,body);
   }
 }
