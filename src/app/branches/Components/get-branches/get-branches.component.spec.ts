@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GetBranchesComponent } from './get-branches.component';
 
@@ -6,7 +6,7 @@ describe('GetBranchesComponent', () => {
   let component: GetBranchesComponent;
   let fixture: ComponentFixture<GetBranchesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GetBranchesComponent ]
     })
