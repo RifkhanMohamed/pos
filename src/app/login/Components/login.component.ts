@@ -4,6 +4,7 @@ import { NavBarServicesService } from "src/app/_services/nav-bar-services.servic
 import { AuthService } from "src/app/_services/auth.service";
 import { TokenStorageService } from "src/app/_services/token-storage.service";
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ form=new FormGroup({
   userName:new FormControl(''),
   password: new FormControl('')
 })
-  constructor(private nav: NavBarServicesService,private authService: AuthService, private tokenStorageService:TokenStorageService) { }
+  constructor(private nav: NavBarServicesService,private authService: AuthService, private tokenStorageService:TokenStorageService,private route: Router) { }
 
   ngOnInit(): void {
     this.nav.hide(); 
@@ -39,7 +40,7 @@ form=new FormGroup({
       "username":this.form.get('userName').value,
       "password":this.form.get('password').value
     }
-    this.nav.hide();
+    // this.nav.hide();
     this.authService.login(body).toPromise()
     .then(res=>{
       this.tokenStorageService.saveToken(res.accessToken);
@@ -47,6 +48,7 @@ form=new FormGroup({
       this.isLoginFailed=false;
       this.isLoggedIn=true;
       this.roles=this.tokenStorageService.getUser().roles;
+      this.route.navigate(['home']);
     })
     .catch(e=>{
       console.log(e);
