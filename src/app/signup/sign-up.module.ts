@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { authInterceptorProviders } from "src/app/_helpers/auth.interceptor";
 import { SignUpComponent } from "./Components/sign-up/sign-up.component";
-
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -17,7 +17,9 @@ const routes: Routes = [
   declarations: [SignUpComponent],
   imports: [
     CommonModule,
-    [RouterModule.forChild(routes)]
+    [RouterModule.forChild(routes)],
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers:[
     authInterceptorProviders

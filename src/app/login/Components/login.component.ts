@@ -77,4 +77,8 @@ modalRef: BsModalRef;
     );
   }
 
+  onSignUp(){
+    this.route.navigate(['signup']);
+  }
+
 }
