@@ -6,23 +6,42 @@
                 <form action="" name="form" [formGroup]="form">
                     <div class="form-group">
                         <label for="name">Name with initial</label>
-                        <input type="text" class="form-control" formControlName="name">
+                        <input type="text" class="form-control" formControlName="name" placeholder="A.R.M Rifkhan" [ngClass]="{'is-invalid':form.get('name').touched && form.get('name').invalid}">
+                        <div *ngIf="form.get('name').touched && form.get('name').invalid" class="invalid-feedback">
+                            <div *ngIf="form.get('name').errors.required">name is required</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="nic">National identity card number</label>
-                        <input type="text" class="form-control" formControlName="nic">
+                        <input type="text" class="form-control" formControlName="nic" [ngClass]="{'is-invalid':form.get('nic').touched && form.get('nic').invalid}">
+                        <div *ngIf="form.get('nic').touched && form.get('nic').invalid" class="invalid-feedback">
+                            <div *ngIf="form.get('nic').errors.required">nic is required</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="address">Address</label>
-                        <input type="text" class="form-control" formControlName="address">
+                        <input type="text" class="form-control" formControlName="address" [ngClass]="{'is-invalid':form.get('address').touched && form.get('address').invalid}">
+                        <div *ngIf="form.get('address').touched && form.get('address').invalid" class="invalid-feedback">
+                            <div *ngIf="form.get('address').errors.required">address is required</div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" class="form-control" formControlName="city">
+                        <label for="city">Town</label>
+                        <select name="town" id="" class="form-control" formControlName="town" [ngClass]="{'is-invalid':form.get('town').touched && form.get('town').invalid}">
+                            <option *ngFor="let town of Towns" value={{town.cityId}}>{{town.cityName}}</option>
+                        </select>
+                        <div *ngIf="{'is-invalid':form.get('town').touched && form.get('town').invalid}" class="invalid-feedback">
+                            <div *ngIf="form.get('town').errors.required">town is required</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="email">E-mail</label>
-                        <input type="text" class="form-control" formControlName="email">
+                        <input type="text" class="form-control" formControlName="email" [ngClass]="{'is-invalid':form.get('email').touched && form.get('email').invalid}">
+                        <div *ngIf="{'is-invalid':form.get('email').touched && form.get('email').invalid}" class="invalid-feedback">
+                            <div *ngIf="form.get('email').errors.required">e-mail is required</div>
+                            <div *ngIf="form.get('email').errors.userEmailIsNotAllowed" >e-mail must be uniqueness</div>
+                            <div *ngIf="form.get('email').errors.email" >invalid e-mail</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="mobile">Mobile number</label>
