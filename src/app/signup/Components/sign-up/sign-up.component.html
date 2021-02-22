@@ -15,7 +15,8 @@
                         <label for="nic">National identity card number</label>
                         <input type="text" class="form-control" formControlName="nic" [ngClass]="{'is-invalid':form.get('nic').touched && form.get('nic').invalid}">
                         <div *ngIf="form.get('nic').touched && form.get('nic').invalid" class="invalid-feedback">
-                            <div *ngIf="form.get('nic').errors.required">nic is required</div>
+                            <div *ngIf="form.get('nic').errors?.required">nic is required</div>
+                            <div *ngIf="form.get('nic').errors?.userNicIsNotAllowed">nic is already exist!</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -38,25 +39,36 @@
                         <label for="email">E-mail</label>
                         <input type="text" class="form-control" formControlName="email" [ngClass]="{'is-invalid':form.get('email').touched && form.get('email').invalid}">
                         <div *ngIf="{'is-invalid':form.get('email').touched && form.get('email').invalid}" class="invalid-feedback">
-                            <div *ngIf="form.get('email').errors.required">e-mail is required</div>
-                            <div *ngIf="form.get('email').errors.userEmailIsNotAllowed" >e-mail must be uniqueness</div>
-                            <div *ngIf="form.get('email').errors.email" >invalid e-mail</div>
+                            <div *ngIf="form.get('email').errors?.required">e-mail is required</div>
+                            <div *ngIf="form.get('email').errors?.userEmailIsNotAllowed">e-mail is already exist!</div>
+                            <div *ngIf="form.get('email').errors?.email">invalid e-mail</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="mobile">Mobile number</label>
-                        <input type="text" class="form-control" formControlName="mobile">
+                        <input type="text" class="form-control" formControlName="mobile" [ngClass]="{'is-invalid':form.get('mobile').touched && form.get('mobile').invalid}">
+                        <div *ngIf="{'is-invalid':form.get('mobile').touched && form.get('mobile').invalid}" class="invalid-feedback">
+                            <div *ngIf="form.get('mobile').errors?.required">mobile number is required</div>
+                            <div *ngIf="form.get('mobile').errors?.pattern">invalid mobile number</div>
+                            <div *ngIf="form.get('mobile').errors?.userPhoneIsNotAllowed">mobile number is already exist!</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="land">Land phone number</label>
-                        <input type="text" class="form-control" formControlName="land">
+                        <input type="text" class="form-control" formControlName="land" [ngClass]="{'is-invalid':form.get('land').touched && form.get('land').invalid}">
+                        <div *ngIf="{'is-invalid':form.get('land').touched && form.get('land').invalid}" class="invalid-feedback">
+                            <div *ngIf="form.get('land').errors?.pattern">invalid land number</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="fax">Fax number</label>
-                        <input type="text" class="form-control" formControlName="fax">
+                        <input type="text" class="form-control" formControlName="fax" [ngClass]="{'is-invalid':form.get('fax').touched && form.get('fax').invalid}">
+                        <div *ngIf="{'is-invalid':form.get('fax').touched && form.get('fax').invalid}" class="invalid-feedback">
+                            <div *ngIf="form.get('fax').errors?.pattern">invalid fax number</div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary pull-right"  [disabled]="!form.valid">Register</button>
+                        <button class="btn btn-primary pull-right" (click)="onRegister()" [disabled]="!form.valid">Register</button>
                     </div>
                     <br>
                 </form>
