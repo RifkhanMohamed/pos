@@ -15,9 +15,9 @@
         </div>
     </div>
 <br>
-    <div class="row jumbotron ">
+    <div class="row jumbotron " style="overflow: auto;">
         <div class="col-sm-12">
-            <div *ngIf="this.getAllBranches.length>0">
+            <div *ngIf="total!=0">
                 <table id="tableDatas" matSort (matSortChange)="sortData($event)" >
                     <thead>
                         <tr>
@@ -36,10 +36,10 @@
                             <td>{{table.address}}</td>
                             <td>{{table.phoneNo}}</td>
                             <td>{{table.email}}</td>
-                            <td>{{table.faxNo}}</td>
+                            <td>{{table?.faxNo ||"null"}}</td>
                             <td>
                                 <div *ngIf="table.unit!=[]">
-                                    <div *ngFor="let unit of table.unit">{{unit.name}}</div>
+                                    <div *ngFor="let unit of table.unit">{{unit?.name ||"null"}}</div>
                                 </div>
                             </td>
                             <td>
@@ -74,7 +74,7 @@
                     </div>
                 </div> 
             </div>
-            <div *ngIf="this.getAllBranches.length==0" >
+            <div *ngIf="total==0" >
                 <div class="text-center" >
                     <h1>No Results Found</h1>
                 </div>

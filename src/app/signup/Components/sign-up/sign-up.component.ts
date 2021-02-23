@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ToastrService } from 'ngx-toastr';
 import { NavBarServicesService } from "src/app/_services/nav-bar-services.service";
@@ -16,8 +17,9 @@ export class SignUpComponent implements OnInit {
   nicDetails=[];
   form=new FormGroup({});
   forMail=false;
+  spinnerOn=false;
 
-  constructor(private toastr: ToastrService,private nav: NavBarServicesService,private fb: FormBuilder,private appService: SignUpService) { 
+  constructor(private toastr: ToastrService,private route:Router,private nav: NavBarServicesService,private fb: FormBuilder,private appService: SignUpService) { 
     this.nav.hide(); 
     this.form=fb.group({
       name:new FormControl('',[Validators.required]),
@@ -89,10 +91,11 @@ export class SignUpComponent implements OnInit {
   }
 
   onRegister(){
+    this.spinnerOn=true;
     let body={
       "userDetails": {
         "correspondanceaddress": this.form.get('address').value,
-        "email": this.form.get('mail').value,
+        "email": this.form.get('email').value,
         "emailverifiedid": true,
         "faxno": this.form.get('fax').value,
         "lanNo": this.form.get('land').value,
@@ -107,10 +110,13 @@ export class SignUpComponent implements OnInit {
     
     this.appService.signUp(body).toPromise()
     .then(res=>{
-      this.toastr.success(res);
+      this.spinnerOn=false;
+      this.toastr.success("check your email for your username and password :)",res.message);
+      this.route.navigate(['login']);
     })
     .catch(e=>{
-      this.toastr.error(e);
+      this.spinnerOn=false;
+      this.toastr.error(e.message);
       console.log(e);
     })
   }

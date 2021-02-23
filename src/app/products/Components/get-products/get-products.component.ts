@@ -22,12 +22,12 @@ p:number=1;
 total:number;
 itemsPerPage:number=10;
 constructor(private toastr: ToastrService,private products:ProductsService,private http: HttpClient,private router: Router) {
-this.getAllProductsMethod();
+
 
 }
 
 ngOnInit() {
-
+  this.getAllProductsMethod();
   
 }
 

@@ -7,10 +7,12 @@ import { NavBarServicesService } from "src/app/_services/nav-bar-services.servic
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private nav: NavBarServicesService) { }
+  constructor(private nav: NavBarServicesService) {
+    this.nav.show();
+   }
 
   ngOnInit(): void {
-    this.nav.show();
+   
   }
 
 }

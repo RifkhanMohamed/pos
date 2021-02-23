@@ -30,10 +30,11 @@ form=new FormGroup({
   password: new FormControl('')
 })
 modalRef: BsModalRef;
-  constructor(private nav: NavBarServicesService,private authService: AuthService, private tokenStorageService:TokenStorageService,private route: Router,private modalService: BsModalService) { }
+  constructor(private nav: NavBarServicesService,private authService: AuthService, private tokenStorageService:TokenStorageService,private route: Router,private modalService: BsModalService) { 
+    this.nav.hide(); 
+  }
 
   ngOnInit(): void {
-    this.nav.hide(); 
     if(this.tokenStorageService.getToken()){
       this.isLoggedIn=false;
       this.roles=this.tokenStorageService.getUser().roles;

@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="!spinnerOn" class="container">
     <div class="row">
         <div class="col-sm-10 mx-auto">
             <div class="jumbotron">
@@ -8,7 +8,7 @@
                         <label for="name">Name with initial</label>
                         <input type="text" class="form-control" formControlName="name" placeholder="A.R.M Rifkhan" [ngClass]="{'is-invalid':form.get('name').touched && form.get('name').invalid}">
                         <div *ngIf="form.get('name').touched && form.get('name').invalid" class="invalid-feedback">
-                            <div *ngIf="form.get('name').errors.required">name is required</div>
+                            <div *ngIf="form.get('name').errors?.required">name is required</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -23,7 +23,7 @@
                         <label for="address">Address</label>
                         <input type="text" class="form-control" formControlName="address" [ngClass]="{'is-invalid':form.get('address').touched && form.get('address').invalid}">
                         <div *ngIf="form.get('address').touched && form.get('address').invalid" class="invalid-feedback">
-                            <div *ngIf="form.get('address').errors.required">address is required</div>
+                            <div *ngIf="form.get('address').errors?.required">address is required</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -32,7 +32,7 @@
                             <option *ngFor="let town of Towns" value={{town.cityId}}>{{town.cityName}}</option>
                         </select>
                         <div *ngIf="{'is-invalid':form.get('town').touched && form.get('town').invalid}" class="invalid-feedback">
-                            <div *ngIf="form.get('town').errors.required">town is required</div>
+                            <div *ngIf="form.get('town').errors?.required">town is required</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -72,6 +72,24 @@
                     </div>
                     <br>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="spinnerOn" class="container" >
+    <div class="row">
+        <div class="col-sm-12 mx-auto">
+            <div class="Content-wrapper">
+                <div id="spinner" >
+                    <div id="spinner_content">
+                        <div class="col-sm-12 mx-auto">
+                            <div class="form-group" style="text-align: center;">
+                                <h2>Please wait...</h2>
+                                <img src="assets/Images/spinner.gif"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

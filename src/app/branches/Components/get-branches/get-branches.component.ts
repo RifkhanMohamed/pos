@@ -34,10 +34,15 @@ export class GetBranchesComponent implements OnInit {
   total:number;
   itemsPerPage:number=10;
   constructor(private units: UnitsService,private toastr: ToastrService,private fb: FormBuilder,private http: HttpClient,private router: Router,private branch:BranchesService) {
-this.getAllBranchesMethod();
+
+
+   }
+
+  ngOnInit(): void {
+    this.getAllBranchesMethod();
 this.getAllUnitMethod();
 
-this.branchForm=fb.group({
+this.branchForm=this.fb.group({
   branchAddress:new FormControl(''),
   branchName:new FormControl('',[Validators.required,this.uniqueBranchName.bind(this)]),
   branchTelNo:new FormControl('',[Validators.required,Validators.pattern("[0-9 ]{10}"),this.uniqueTelNoBranch.bind(this)]),
@@ -46,13 +51,9 @@ this.branchForm=fb.group({
   branchUnit:new FormControl('')
 })
 
-this.unitForm= fb.group({
+this.unitForm= this.fb.group({
   unitName:new FormControl('',[Validators.required,this.uniqueUnitName.bind(this)])
 })
-
-   }
-
-  ngOnInit(): void {
   }
 
   uniqueBranchName(control:FormControl){

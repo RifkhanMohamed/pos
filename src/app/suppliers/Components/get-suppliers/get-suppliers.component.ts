@@ -16,16 +16,18 @@ export class GetSuppliersComponent implements OnInit {
   itemsPerPage:number=10;
   constructor(private suppliers:SuppliersService) 
   {
-    this.getAllSuppliersMethod();
+    
   }
 
   ngOnInit(): void {
+    this.getAllSuppliersMethod();
   }
 
   getAllSuppliersMethod(){
     this.suppliers.getAllSuppliers().subscribe(
       res=>{
         this.getAllSuppliers= res as Supplier[];
+        this.total=this.getAllSuppliers.length
       })
   }
 }
