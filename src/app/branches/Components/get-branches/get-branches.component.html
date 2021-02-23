@@ -18,7 +18,7 @@
     <div class="row jumbotron " style="overflow: auto;">
         <div class="col-sm-12">
             <div *ngIf="total!=0">
-                <table id="tableDatas" matSort (matSortChange)="sortData($event)" >
+                <table id="tableDatas" matSort (matSortChange)="sortData($event)"  >
                     <thead>
                         <tr>
                             <th mat-sort-header="name">Name</th>
@@ -43,8 +43,8 @@
                                 </div>
                             </td>
                             <td>
-                                <button class="btn-sm btn-primary" (click)="onEdit(table.branchId)"><i class="fa pointer fa-edit" ></i></button>&nbsp;
-                                <button class="btn-sm btn-danger" (click)="onDelete(table.branchId)"><i class="fa pointer fa-trash"></i></button>
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.branchId)" ></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-trash" (click)="onDelete(table.branchId)"></i>
                             </td>
                         </tr>
                     </tbody>

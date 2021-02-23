@@ -51,8 +51,8 @@
                                     <td>{{table.suppliers?.name||"null"}}</td>
                                     <td>{{table.branch?.name||"null"}}</td>
                                     <td >
-                                        <button class="btn-sm btn-primary" (click)="onEdit(table.productId)"><i class="fa pointer fa-edit" ></i></button>&nbsp;
-                                        <button class="btn-sm btn-danger" (click)="onDelete(table.productId)"><i class="fa pointer fa-trash"></i></button>
+                                        <i class="fa pointer fa-edit" (click)="onEdit(table.productId)" ></i>&nbsp;&nbsp;
+                                        <i class="fa pointer fa-trash" (click)="onDelete(table.productId)"></i>
                                     </td>
                                 </tr>
                             </tbody>

@@ -18,7 +18,55 @@
     <div class="row jumbotron">
         <div class="col-sm-12">
             <div *ngIf="total!=0">
-                Hello
+                <table id="tableDatas" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th mat-sort-header="name">Name</th>
+                            <th mat-sort-header="address">Address</th>
+                            <th mat-sort-header="telNo">Phone</th>
+                            <th mat-sort-header="email">Email</th>
+                            <th mat-sort-header="faxNo">Fax</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let table of sortedData  | filter:searchText | paginate:{itemsPerPage:itemsPerPage,currentPage:p,totalItems: total}; let i = index">
+                            <td>{{table.name}}</td>
+                            <td>{{table.address}}</td>
+                            <td>{{table.telNo}}</td>
+                            <td>{{table.email}}</td>
+                            <td>{{table?.faxNo ||"null"}}</td>
+                            <td>
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId)" ></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-trash" (click)="onDelete(table.supplierId)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+<br>
+                </table>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-4" style="padding-right: 0px; padding-left: 15px;">
+                                <label for="">Items per page</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <select [(ngModel)]="itemsPerPage" style="padding-left: 8px;width: 68px;" class="form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <pagination-controls  (pageChange)="p=$event"></pagination-controls>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        Total Suppliers - {{total}}
+                    </div>
+                </div> 
             </div>
             <div *ngIf="total==0">
                 <h1 class="text-center">No Results Found</h1>
