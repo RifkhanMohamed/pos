@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-10 mx-auto">
             <div class="jumbotron">
-                <h1 style="text-align: center;">Add New Products</h1>
+                <h3 style="text-align: center;"><hr> Add New Products <hr></h3>
                     <form action="" name="form" [formGroup]="form">
                         <div class="form-group">
                             <label for="productCode">Product Code</label>
@@ -252,7 +252,7 @@
                                 </tag-input>
                             </div>
                             <div class="col-4">
-                                <button class="btn btn-primary" data-target="#unitModal" data-toggle="modal">Add New</button>
+                                <button class="btn btn-primary" data-target="#unitModal" data-toggle="modal" data-dismiss="modal">Add New</button>
                             </div>
                         </div>
                     </div>
@@ -331,7 +331,7 @@
         <div class="modal-footer">
             <div class="form-group">
                 <button class="btn btn-primary" [disabled]="!unitForm.valid" (click)="createNewUnit()">Add New</button>
-                &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                &nbsp;<button class="btn btn-secondary" data-dismiss="modal" data-target="#branchModal" data-toggle="modal">Exit</button>
             </div>
         </div>
       </div>

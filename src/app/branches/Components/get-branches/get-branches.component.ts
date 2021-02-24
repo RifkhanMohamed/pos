@@ -9,6 +9,7 @@ import { Unit } from "../../../units/Modals/unit";
 import { BranchesModule } from '../../branches.module';
 import { FormGroup,FormControl ,FormBuilder,Validators,} from '@angular/forms';
 import { UnitsService } from 'src/app/units/Services/units.service';
+import { ThrowStmt } from '@angular/compiler';
 @Component({
   selector: 'app-get-branches',
   templateUrl: './get-branches.component.html',
@@ -20,6 +21,7 @@ export class GetBranchesComponent implements OnInit {
   getAllUnits:Unit[];
 
   branchForm=new FormGroup({});
+  branchEditForm=new FormGroup({});
   unitForm=new FormGroup({});
 
   allBranchTelNo=[];
@@ -33,6 +35,7 @@ export class GetBranchesComponent implements OnInit {
   p:number=1;
   total:number;
   itemsPerPage:number=10;
+  branchId:number;
   constructor(private units: UnitsService,private toastr: ToastrService,private fb: FormBuilder,private http: HttpClient,private router: Router,private branch:BranchesService) {
 
 
@@ -49,7 +52,15 @@ this.branchForm=this.fb.group({
   branchEmail:new FormControl('',[Validators.required,Validators.email,this.uniqueEmailBranch.bind(this)]),
   branchFaxNo:new FormControl(''),
   branchUnit:new FormControl('')
-})
+});
+
+this.branchEditForm=this.fb.group({
+  branchEditAddress:new FormControl(''),
+  branchEditName:new FormControl('',[Validators.required]),
+  branchEditTelNo:new FormControl('',[Validators.required,Validators.pattern("[0-9 ]{10}")]),
+  branchEditEmail:new FormControl('',[Validators.required,Validators.email]),
+  branchEditFaxNo:new FormControl('')
+});
 
 this.unitForm= this.fb.group({
   unitName:new FormControl('',[Validators.required,this.uniqueUnitName.bind(this)])
@@ -131,19 +142,19 @@ this.unitForm= this.fb.group({
         case 'phoneNo': return compare(a.phoneNo, b.phoneNo, isAsc);
         case 'email': return compare(a.email, b.email, isAsc);
         case 'faxNo': return compare(a.faxNo, b.faxNo, isAsc);
-        case 'unit': return compare(a.unit.name, b.unit.name, isAsc);
+        // case 'unit': return compare(a.unit[0].name, b.unit.name, isAsc);
         default: return 0;
       }
     });
   }
 
   createNewBranch(){
-
+    this.unitIds=[];
     if(this.unitsValues!=[]){
       for(var i =0;i<this.unitsValues.length;i++){
         this.getAllUnits.filter(x=>x.name==this.unitsValues[i].value).forEach(s=>this.unitIds.push(
         {
-          "archived": true,
+          "archived": false,
           "unitId": s.unitId
         }
         )
@@ -157,7 +168,7 @@ console.log(this.unitIds,"this.unitIds");
     if(this.unitsValues==[]){
       body={
         "address": this.branchForm.get('branchAddress').value,
-        "archived": true,
+        "archived": false,
         "email": this.branchForm.get('branchEmail').value,
         "faxNo": this.branchForm.get('branchFaxNo').value,
         "name": this.branchForm.get('branchName').value,
@@ -167,7 +178,7 @@ console.log(this.unitIds,"this.unitIds");
     else{
       body={
         "address": this.branchForm.get('branchAddress').value,
-        "archived": true,
+        "archived": false,
         "email": this.branchForm.get('branchEmail').value,
         "faxNo": this.branchForm.get('branchFaxNo').value,
         "name": this.branchForm.get('branchName').value,
@@ -180,15 +191,98 @@ console.log(this.unitIds,"this.unitIds");
     .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
   }
 
-  onEdit(id){
-
+  onEdit(id,i){
+    this.branchId=Number(id);
+    this.unitsValues=[];
+    for(var j=0;j<this.sortedData[i].unit.length;j++){
+      this.unitsValues.push({
+        display: this.sortedData[i].unit[j].name, 
+        value: this.sortedData[i].unit[j].name
+      });
+    }
+    
+    this.branchEditForm.get('branchEditName').setValue(this.sortedData[i].name);
+    this.branchEditForm.get('branchEditAddress').setValue(this.sortedData[i].address);
+    this.branchEditForm.get('branchEditEmail').setValue(this.sortedData[i].email);
+    this.branchEditForm.get('branchEditFaxNo').setValue(this.sortedData[i].faxNo);
+    this.branchEditForm.get('branchEditTelNo').setValue(this.sortedData[i].phoneNo);
   }
+
+  updateBranch(){
+    this.unitIds=[];
+    console.log(this.unitsValues);
+    
+    if(this.unitsValues!=[]){
+      for(var i =0;i<this.unitsValues.length;i++){
+        this.getAllUnits.filter(x=>x.name==this.unitsValues[i].value).forEach(s=>this.unitIds.push(
+        {
+          "archived": false,
+          "unitId": s.unitId
+        }
+        )
+        )
+      }
+    }
+console.log(this.unitIds,"this.unitIds");
+
+    
+    let body;
+    if(this.unitsValues==[]){
+      body={
+        "address": this.branchEditForm.get('branchEditAddress').value,
+        "archived": false,
+        "email": this.branchEditForm.get('branchEditEmail').value,
+        "faxNo": this.branchEditForm.get('branchEditFaxNo').value,
+        "name": this.branchEditForm.get('branchEditName').value,
+        "phoneNo": this.branchEditForm.get('branchEditTelNo').value,
+        "branchId":this.branchId
+    }
+    }
+    else{
+      body={
+        "address": this.branchEditForm.get('branchEditAddress').value,
+        "archived": false,
+        "email": this.branchEditForm.get('branchEditEmail').value,
+        "faxNo": this.branchEditForm.get('branchEditFaxNo').value,
+        "name": this.branchEditForm.get('branchEditName').value,
+        "phoneNo": this.branchEditForm.get('branchEditTelNo').value,
+        "unit": this.unitIds,
+        "branchId":this.branchId
+    }
+    }
+
+    this.branch.updateBranch(body).toPromise()
+    .then(s=>{
+      this.toastr.success(s.message);
+      this.getAllBranchesMethod();
+    })
+    .catch(e=>{
+      if(e.error.error){
+        this.toastr.error(e.error.error);
+      }
+      else{
+        this.toastr.error(e.error);
+      }
+    })
+  }
+
+  addNewModal(){
+    this.unitsValues=[];
+  }
+
   onDelete(id){
     let branchName;
     this.getAllBranches.filter(s=>s.branchId==id).forEach(x=>branchName=x.name);
    this.branch.deleteBranch(id).toPromise().
-   then(s => { this.toastr.success( branchName+" Successfully Deleted..!");this.getAllBranchesMethod();})
-   .catch((s) => { this.toastr.error("Error", s['error']['message']); console.log(s);}); 
+   then(s => { this.toastr.success(s.message);this.getAllBranchesMethod();})
+   .catch((e) => {       
+     if(e.error.error){
+    this.toastr.error(e.error.error);
+  }
+  else{
+    this.toastr.error(e.error);
+  }
+}); 
   }
   onResetBranch(){
     this.branchForm.get('branchAddress').patchValue('');

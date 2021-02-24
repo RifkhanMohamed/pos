@@ -4,7 +4,7 @@
             <div class="Content-wrapper">
                 <div class="row">
                     <div class="col-md-3">
-                        <button class="btn btn-primary" data-target="#branchModal" data-toggle="modal">Add New</button>
+                        <button class="btn btn-primary" data-target="#branchModal" data-toggle="modal" (click)="addNewModal()">Add New</button>
                     </div>
                     <div class="col-md-9">
                         <input type="text" class="form-control-sm form-control" [(ngModel)]="searchText"  placeholder="Search" >
@@ -17,6 +17,8 @@
 <br>
     <div class="row jumbotron " style="overflow: auto;">
         <div class="col-sm-12">
+            <h3 style="text-align: center; "><hr> Branches <hr></h3>
+            <br>
             <div *ngIf="total!=0">
                 <table id="tableDatas" matSort (matSortChange)="sortData($event)"  >
                     <thead>
@@ -26,7 +28,7 @@
                             <th mat-sort-header="phoneNo">Phone</th>
                             <th mat-sort-header="email">Email</th>
                             <th mat-sort-header="faxNo">Fax</th>
-                            <th mat-sort-header="unit">Unit</th>
+                            <th>Unit</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -43,7 +45,7 @@
                                 </div>
                             </td>
                             <td>
-                                <i class="fa pointer fa-edit" (click)="onEdit(table.branchId)" ></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.branchId,i)" data-target="#branchEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
                                 <i class="fa pointer fa-trash" (click)="onDelete(table.branchId)"></i>
                             </td>
                         </tr>
@@ -83,7 +85,7 @@
     </div>
 </div>
 
-
+<!-- Branch Modal -->
 <div class="modal fade" id="branchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
@@ -105,7 +107,7 @@
                             </tag-input>
                         </div>
                         <div class="col-4">
-                            <button class="btn btn-primary" data-target="#unitModal" data-toggle="modal">Add New Unit</button>
+                            <button class="btn btn-primary" data-target="#unitModal" data-toggle="modal" data-dismiss="modal">Add New Unit</button>
                         </div>
                     </div>
                 </div>
@@ -159,7 +161,85 @@
     </div>
   </div>
 
-    <!-- Unit Modal -->
+
+<!-- Branch Edit Modal -->
+      <div class="modal fade" id="branchEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="branchEditForm" [formGroup]="branchEditForm">
+                    <div class="form-group">
+                        <label for="branchEditUnit">Branch Unit</label>
+                        <div class="row">
+                            <div class="col-8">
+                                <!-- <select  name="" id="" class="form-control" formControlName="branchUnit">
+                                    <option *ngFor="let unit of getAllUnits" value={{unit.unitId}}>{{unit.name}}</option>
+                                </select> -->
+                                <tag-input [(ngModel)]="unitsValues" [ngModelOptions]="{standalone: true}"  [removable]='true' placeholder="" [clearOnBlur]="true" secondaryPlaceholder="Enter Units..." clearOnBlur="true" [onlyFromAutocomplete]="true">
+                                    
+                                        <tag-input-dropdown [showDropdownIfEmpty]="true" [appendToBody]="false"  [autocompleteItems]="allUnitName" ></tag-input-dropdown>
+                                   
+                                </tag-input>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-primary" data-target="#unitEditModal" data-toggle="modal" data-dismiss="modal">Add New Unit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchEditName">Branch Name</label>
+                        <input type="text" class="form-control" formControlName="branchEditName" [ngClass]="{'is-invalid':branchEditForm.get('branchEditName').touched && branchEditForm.get('branchEditName').invalid}">
+                        <div *ngIf="branchEditForm.get('branchEditName').touched&&branchEditForm.get('branchEditName').invalid" class="invalid-feedback">
+                            <div *ngIf="branchEditForm.get('branchEditName').errors.required" >Branch Name is required</div>
+                            <!-- <div *ngIf="branchForm.get('branchName').errors.branchNameIsNotAllowed" >Branch Name must be uniqueness</div> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchEditAddress">Branch Address</label>
+                        <input type="text" class="form-control" formControlName="branchEditAddress">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="branchEditTelNo">Branch Phone Number</label>
+                        <input type="text" class="form-control" formControlName="branchEditTelNo"  [ngClass]="{'is-invalid':branchEditForm.get('branchEditTelNo').touched && branchEditForm.get('branchEditTelNo').invalid}">
+                        <div *ngIf="branchEditForm.get('branchEditTelNo').touched && branchEditForm.get('branchEditTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="branchEditForm.get('branchEditTelNo').errors.required" >Branch Phone Number is required</div>
+                            <!-- <div *ngIf="branchEditForm.get('branchTelNo').errors.branchTelNoIsNotAllowed" >Phone Number must be uniqueness</div> -->
+                            <div *ngIf="branchEditForm.get('branchEditTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchEditEmail">Branch Email</label>
+                        <input type="text" class="form-control" formControlName="branchEditEmail"  [ngClass]="{'is-invalid':branchEditForm.get('branchEditEmail').touched && branchEditForm.get('branchEditEmail').invalid}">
+                        <div *ngIf="branchEditForm.get('branchEditEmail').touched && branchEditForm.get('branchEditEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="branchEditForm.get('branchEditEmail').errors.required" >Branch Email is required</div>
+                            <!-- <div *ngIf="branchEditForm.get('branchEmail').errors.branchEmailIsNotAllowed" >Email must be uniqueness</div> -->
+                            <div *ngIf="branchEditForm.get('branchEditEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchEditFaxNo">Branch Fax Number</label>
+                        <input type="text" class="form-control" formControlName="branchEditFaxNo">
+                    </div>
+    
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!branchEditForm.valid" (click)="updateBranch()">Update</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+          <!-- Unit Modal -->
     <div class="modal fade" id="unitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
           <div class="modal-content">
@@ -182,7 +262,38 @@
             <div class="modal-footer">
                 <div class="form-group">
                     <button class="btn btn-primary" [disabled]="!unitForm.valid" (click)="createNewUnit()">Add New</button>
-                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                    &nbsp;<button class="btn btn-secondary" data-target="#branchModal" data-toggle="modal" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+                <!-- Unit Edit Modal -->
+    <div class="modal fade" id="unitEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="unitForm" [formGroup]="unitForm">
+                    <div class="form-group">
+                        <label for="unitName">Unit Name</label>
+                        <input type="text" class="form-control" formControlName="unitName"  [ngClass]="{'is-invalid':unitForm.get('unitName').touched && unitForm.get('unitName').invalid}">
+                        <div *ngIf="unitForm.get('unitName').touched&&unitForm.get('unitName').invalid" class="invalid-feedback">
+                            <div *ngIf="unitForm.get('unitName').errors.required" >Unit Name is required</div>
+                            <div *ngIf="unitForm.get('unitName').errors.unitNameIsNotAllowed" >Unit Name must be uniqueness</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!unitForm.valid" (click)="createNewUnit()">Add New</button>
+                    &nbsp;<button class="btn btn-secondary" data-target="#branchEditModal" data-toggle="modal" data-dismiss="modal">Exit</button>
                 </div>
             </div>
           </div>

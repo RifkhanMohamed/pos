@@ -12,5 +12,5 @@ export interface Branch{
         lastModifiedDate: string,
         name: string,
         phoneNo: string,
-        unit: Unit   
+        unit: Unit[]   
 }

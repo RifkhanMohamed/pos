@@ -15,8 +15,10 @@
         </div>
     </div>
 <br>
-    <div class="row jumbotron">
+    <div class="row jumbotron" style="overflow: auto;">
         <div class="col-sm-12">
+            <h3 style="text-align: center;"><hr> Suppliers <hr></h3>
+            <br>
             <div *ngIf="total!=0">
                 <table id="tableDatas" matSort (matSortChange)="sortData($event)">
                     <thead>
@@ -37,7 +39,7 @@
                             <td>{{table.email}}</td>
                             <td>{{table?.faxNo ||"null"}}</td>
                             <td>
-                                <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId)" ></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId,i)" data-target="#supplierEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
                                 <i class="fa pointer fa-trash" (click)="onDelete(table.supplierId)"></i>
                             </td>
                         </tr>
@@ -74,3 +76,113 @@
         </div>
     </div>
 </div>
+
+    <!-- Supplier Modal -->
+    <div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="supplierForm" [formGroup]="supplierForm">
+                    <div class="form-group">
+                        <label for="supplierName">Supplier Name</label>
+                        <input type="text" class="form-control" formControlName="supplierName" [ngClass]="{'is-invalid':supplierForm.get('supplierName').touched && supplierForm.get('supplierName').invalid}">
+                        <div class="invalid-feedback">
+                            <div>Supplier Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierAddress">Supplier Address</label>
+                        <input type="text" class="form-control" formControlName="supplierAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierTelNo">Supplier Phone Number</label>
+                        <input type="text" class="form-control" formControlName="supplierTelNo"  [ngClass]="{'is-invalid':supplierForm.get('supplierTelNo').touched && supplierForm.get('supplierTelNo').invalid}">
+                        <div *ngIf="supplierForm.get('supplierTelNo').touched&&supplierForm.get('supplierTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="supplierForm.get('supplierTelNo').errors.required" >Supplier Phone Number is required</div>
+                            <div *ngIf="supplierForm.get('supplierTelNo').errors.supplierTelNoIsNotAllowed" >Phone Number must be uniqueness</div>
+                            <div *ngIf="supplierForm.get('supplierTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierEmail">Supplier Email</label>
+                        <input type="text" class="form-control" formControlName="supplierEmail"  [ngClass]="{'is-invalid':supplierForm.get('supplierEmail').touched && supplierForm.get('supplierEmail').invalid}">
+                        <div *ngIf="supplierForm.get('supplierEmail').touched&&supplierForm.get('supplierEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="supplierForm.get('supplierEmail').errors.required" >Supplier Email is required</div>
+                            <div *ngIf="supplierForm.get('supplierEmail').errors.supplierEmailIsNotAllowed" >Email must be uniqueness</div>
+                            <div *ngIf="supplierForm.get('supplierEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierFaxNo">Supplier Fax Number</label>
+                        <input type="text" class="form-control" formControlName="supplierFaxNo">
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!supplierForm.valid" (click)="createNewSupplier()">Add New</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          <!-- Supplier Modal -->
+    <div class="modal fade" id="supplierEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="supplierEditForm" [formGroup]="supplierEditForm">
+                    <div class="form-group">
+                        <label for="supplierEditName">Supplier Name</label>
+                        <input type="text" class="form-control" formControlName="supplierEditName" [ngClass]="{'is-invalid':supplierEditForm.get('supplierEditName').touched && supplierEditForm.get('supplierEditName').invalid}">
+                        <div class="invalid-feedback">
+                            <div>Supplier Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierEditAddress">Supplier Address</label>
+                        <input type="text" class="form-control" formControlName="supplierEditAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierEditTelNo">Supplier Phone Number</label>
+                        <input type="text" class="form-control" formControlName="supplierEditTelNo"  [ngClass]="{'is-invalid':supplierEditForm.get('supplierEditTelNo').touched && supplierEditForm.get('supplierEditTelNo').invalid}">
+                        <div *ngIf="supplierEditForm.get('supplierEditTelNo').touched&&supplierEditForm.get('supplierEditTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="supplierEditForm.get('supplierEditTelNo').errors.required" >Supplier Phone Number is required</div>
+                            <!-- <div *ngIf="supplierEditForm.get('supplierEditTelNo').errors.supplierTelNoIsNotAllowed" >Phone Number must be uniqueness</div> -->
+                            <div *ngIf="supplierEditForm.get('supplierEditTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierEditEmail">Supplier Email</label>
+                        <input type="text" class="form-control" formControlName="supplierEditEmail"  [ngClass]="{'is-invalid':supplierEditForm.get('supplierEditEmail').touched && supplierEditForm.get('supplierEditEmail').invalid}">
+                        <div *ngIf="supplierEditForm.get('supplierEditEmail').touched&&supplierEditForm.get('supplierEditEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="supplierEditForm.get('supplierEditEmail').errors.required" >Supplier Email is required</div>
+                            <!-- <div *ngIf="supplierEditForm.get('supplierEditEmail').errors.supplierEmailIsNotAllowed" >Email must be uniqueness</div> -->
+                            <div *ngIf="supplierEditForm.get('supplierEditEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="supplierEditFaxNo">Supplier Fax Number</label>
+                        <input type="text" class="form-control" formControlName="supplierEditFaxNo">
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!supplierEditForm.valid" (click)="updateSupplier()">Update</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
