@@ -1,0 +1,82 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="Content-wrapper">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button id="printButton1" class="btn btn-primary" (click)="addNew()">Add New</button>
+                    </div>
+                    <div class="col-md-9">
+                        <input id="printInput" type="text" class="form-control-sm form-control" [(ngModel)]="searchText" placeholder="Search Customer" >
+                    </div>
+                </div>        
+<br>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row jumbotron" style="overflow: auto;">
+        <div class="col-sm-12">
+            <h3 style="text-align: center;"><hr> Customers <hr></h3>
+            <br>
+            <div *ngIf="total!=0">
+                <table id="tableDatas" matSort (matSortChange)="sortData($event)">
+                    <thead>
+                        <tr>
+                            <th mat-sort-header="name">Name</th>
+                            <th mat-sort-header="phone">Phone</th>
+                            <th mat-sort-header="mail">Email</th>
+                            <th mat-sort-header="address">Address</th>
+                            <th mat-sort-header="account">Account</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let table of sortedData  | filter:searchText | paginate:{itemsPerPage:itemsPerPage,currentPage:p,totalItems: total}; let i = index">
+                            <td>{{table.name}}</td>
+                            <td>{{table.phone}}</td>
+                            <td>{{table.mail}}</td>
+                            <td>{{table.address}}</td>
+                            <td>{{table.account}}</td>
+                            <td>
+                                <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.customerId,i)" data-target="#branchEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-trash" (click)="onDelete(table.customerId)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-4" style="padding-right: 0px; padding-left: 15px;">
+                                <label for="">Items per page</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <select [(ngModel)]="itemsPerPage" style="padding-left: 8px;width: 68px;" class="form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <pagination-controls  (pageChange)="p=$event"></pagination-controls>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        Total Branches - {{total}}
+                    </div>
+                </div> 
+            </div>
+            <div *ngIf="total==0">
+                <div class="text-center" >
+                    <h1>No Results Found</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

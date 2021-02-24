@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-10 mx-auto">
             <div class="jumbotron">
-                <h3 style="text-align: center;"><hr> Add New Products <hr></h3>
+                <h3 *ngIf="!forUpdate" style="text-align: center;"><hr> Add New Products <hr></h3>
+                <h3 *ngIf="forUpdate" style="text-align: center;"><hr> Update Product <hr></h3>
                     <form action="" name="form" [formGroup]="form">
                         <div class="form-group">
                             <label for="productCode">Product Code</label>
