@@ -15,7 +15,7 @@ import { Branch } from "../../../branches/Modals/branch";
 import { Unit } from "../../../units/Modals/unit";
 
 import { ToastrService } from "ngx-toastr";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-products',
@@ -54,7 +54,7 @@ productId:number;
 forUpdate=false;
 
 findProductCodeValue:any;
-  constructor(private toastr: ToastrService,private fb: FormBuilder,private units:UnitsService,private products: ProductsService,private brands: BrandsService,private categories: CategoriesService,private suppliers: SuppliersService,private branches: BranchesService,private route:ActivatedRoute) {
+  constructor(private toastr: ToastrService,private fb: FormBuilder,private units:UnitsService,private products: ProductsService,private brands: BrandsService,private categories: CategoriesService,private suppliers: SuppliersService,private branches: BranchesService,private route:ActivatedRoute,private router:Router) {
     this.getAllProductsMethod();
     this.getAllBrandsMethod();
     this.getAllCategoriesMethod();
@@ -615,7 +615,361 @@ this.allSuppliersTelNo=[];
   }
 
   updateProduct(){
-
+      let body;
+  
+      if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productCategory').value=='' && this.form.get('productBranch').value=='' ){
+        body={
+          "archived": false,
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productName": this.form.get('productName').value,
+          "productId":this.productId
+        }
+      }
+      else if(this.form.get('productCategory').value=='' && this.form.get('productBrand').value=='' && this.form.get('productBranch').value==''){
+        body={
+          "archived": false,
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productName": this.form.get('productName').value,
+          "productId":this.productId,
+          "suppliers": {
+            "archived": false,
+            "supplierId": Number(this.form.get('productSupplier').value)
+          }
+        }
+      }
+      else if(this.form.get('productCategory').value=='' && this.form.get('productSupplier').value=='' && this.form.get('productBranch').value==''){
+        body={
+          "archived": false,
+          "brands": {
+            "archived": false,
+            "brandId": Number(this.form.get('productBrand').value)
+          },
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productId":this.productId,
+          "productName": this.form.get('productName').value
+        }
+      }
+      else if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productBranch').value==''){
+        body={
+          "archived": false,
+          "category": {
+            "archived": false,
+            "cateId": Number(this.form.get('productCategory').value)
+          },
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productId":this.productId,
+          "productName": this.form.get('productName').value
+        }
+      }
+      else if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productCategory').value==''){
+        body={
+          "archived": false,
+          "branch": {
+            "archived": false,
+            "branchId": Number(this.form.get('productBranch').value)
+          },
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productId":this.productId,
+          "productName": this.form.get('productName').value
+        }
+      }
+      else if(this.form.get('productCategory').value=='' && this.form.get('productBranch').value==''){
+        body={
+         "archived": false,
+         "brands": {
+           "archived": false,
+           "brandId": Number(this.form.get('productBrand').value)
+         },
+         "costPrice": this.form.get('costPrice').value,
+         "price": this.form.get('price').value,
+         "productCode": this.form.get('productCode').value,
+         "productDesc": this.form.get('productDes').value,
+         "stockInUnit":this.form.get('productQuantity').value,
+         "productGuar": this.form.get('productGuarantee').value,
+         "productName": this.form.get('productName').value,
+         "productId":this.productId,
+         "suppliers": {
+           "archived": false,
+           "supplierId": Number(this.form.get('productSupplier').value)
+         }
+       }
+      }
+      else if(this.form.get('productCategory').value=='' && this.form.get('productBrand').value==''){
+      body={
+       "archived": false,
+       "branch": {
+         "archived": false,
+         "branchId": Number(this.form.get('productBranch').value)
+       },
+       "costPrice": this.form.get('costPrice').value,
+       "price": this.form.get('price').value,
+       "productCode": this.form.get('productCode').value,
+       "productDesc": this.form.get('productDes').value,
+       "stockInUnit":this.form.get('productQuantity').value,
+       "productGuar": this.form.get('productGuarantee').value,
+       "productId":this.productId,
+       "productName": this.form.get('productName').value,
+       "suppliers": {
+         "archived": false,
+         "supplierId": Number(this.form.get('productSupplier').value)
+       }
+     }
+      }
+      else if(this.form.get('productCategory').value=='' && this.form.get('productSupplier').value==''){
+    body={
+     "archived": false,
+     "brands": {
+       "archived": false,
+       "brandId": Number(this.form.get('productBrand').value)
+     },
+     "costPrice": this.form.get('costPrice').value,
+     "price": this.form.get('price').value,
+     "productCode": this.form.get('productCode').value,
+     "productDesc": this.form.get('productDes').value,
+     "stockInUnit":this.form.get('productQuantity').value,
+     "productGuar": this.form.get('productGuarantee').value,
+     "productId":this.productId,
+     "productName": this.form.get('productName').value,
+     "branch": {
+      "archived": false,
+      "branchId": Number(this.form.get('productBranch').value)
+    }
+   }
+      }
+      else if(this.form.get('productBranch').value==''&&this.form.get('productBrand').value==''){
+    body={
+     "archived": false,
+     "category": {
+      "archived": false,
+      "cateId": Number(this.form.get('productCategory').value)
+    },
+     "costPrice": this.form.get('costPrice').value,
+     "price": this.form.get('price').value,
+     "productCode": this.form.get('productCode').value,
+     "productDesc": this.form.get('productDes').value,
+     "stockInUnit":this.form.get('productQuantity').value,
+     "productGuar": this.form.get('productGuarantee').value,
+     "productId":this.productId,
+     "productName": this.form.get('productName').value,
+     "suppliers": {
+       "archived": false,
+       "supplierId": Number(this.form.get('productSupplier').value)
+     }
+   }
+      }
+      else if(this.form.get('productBranch').value==''&& this.form.get('productSupplier').value==''){
+      body={
+     "archived": false,
+     "category": {
+      "archived": false,
+      "cateId": Number(this.form.get('productCategory').value)
+    },
+     "costPrice": this.form.get('costPrice').value,
+     "price": this.form.get('price').value,
+     "productCode": this.form.get('productCode').value,
+     "productDesc": this.form.get('productDes').value,
+     "stockInUnit":this.form.get('productQuantity').value,
+     "productGuar": this.form.get('productGuarantee').value,
+     "productId":this.productId,
+     "productName": this.form.get('productName').value,
+     "brands": {
+      "archived": false,
+      "brandId": Number(this.form.get('productBrand').value)
+    }
+   }
+      }
+      else if(this.form.get('productSupplier').value==''&&this.form.get('productBrand').value==''){
+      body={
+     "archived": false,
+     "category": {
+      "archived": false,
+      "cateId": Number(this.form.get('productCategory').value)
+    },
+     "costPrice": this.form.get('costPrice').value,
+     "price": this.form.get('price').value,
+     "productCode": this.form.get('productCode').value,
+     "productDesc": this.form.get('productDes').value,
+     "stockInUnit":this.form.get('productQuantity').value,
+     "productGuar": this.form.get('productGuarantee').value,
+     "productId":this.productId,
+     "productName": this.form.get('productName').value,
+     "branch": {
+      "archived": false,
+      "branchId": Number(this.form.get('productBranch').value)
+    }
+   }
+      }
+      else if(this.form.get('productCategory').value==''){
+         body={
+          "archived": false,
+          "brands": {
+            "archived": false,
+            "brandId": Number(this.form.get('productBrand').value)
+          },
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productId":this.productId,
+          "productName": this.form.get('productName').value,
+          "suppliers": {
+            "archived": false,
+            "supplierId": Number(this.form.get('productSupplier').value)
+          },
+          "branch": {
+            "archived": false,
+            "branchId": Number(this.form.get('productBranch').value)
+          }
+        }
+      }
+      else if(this.form.get('productBrand').value==''){
+        body={
+          "archived": false,
+          "category": {
+            "archived": false,
+            "cateId": Number(this.form.get('productCategory').value)
+          },
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productId":this.productId,
+          "productName": this.form.get('productName').value,
+          "suppliers": {
+            "archived": false,
+            "supplierId": Number(this.form.get('productSupplier').value)
+          },
+          "branch": {
+            "archived": false,
+            "branchId": Number(this.form.get('productBranch').value)
+          }
+        }
+      }
+      else if(this.form.get('productSupplier').value==''){
+      body={
+        "archived": false,
+        "brands": {
+          "archived": false,
+          "brandId": Number(this.form.get('productBrand').value)
+        },
+        "category": {
+          "archived": false,
+          "cateId": Number(this.form.get('productCategory').value)
+        },
+        "costPrice": this.form.get('costPrice').value,
+        "price": this.form.get('price').value,
+        "productCode": this.form.get('productCode').value,
+        "productDesc": this.form.get('productDes').value,
+        "stockInUnit":this.form.get('productQuantity').value,
+        "productId":this.productId,
+        "productGuar": this.form.get('productGuarantee').value,
+        "productName": this.form.get('productName').value,
+        "branch": {
+          "archived": false,
+          "branchId": Number(this.form.get('productBranch').value)
+        }
+      }
+      }
+      else if(this.form.get('productBranch').value==''){
+        body={
+          "archived": false,
+          "brands": {
+            "archived": false,
+            "brandId": Number(this.form.get('productBrand').value)
+          },
+          "category": {
+            "archived": false,
+            "cateId": Number(this.form.get('productCategory').value)
+          },
+          "costPrice": this.form.get('costPrice').value,
+          "price": this.form.get('price').value,
+          "productCode": this.form.get('productCode').value,
+          "productDesc": this.form.get('productDes').value,
+          "stockInUnit":this.form.get('productQuantity').value,
+          "productId":this.productId,
+          "productGuar": this.form.get('productGuarantee').value,
+          "productName": this.form.get('productName').value,
+          "suppliers": {
+            "archived": false,
+            "supplierId": Number(this.form.get('productSupplier').value)
+          }
+        }
+      }
+      else{
+      body={
+        "archived": false,
+        "brands": {
+          "archived": false,
+          "brandId": Number(this.form.get('productBrand').value)
+        },
+        "category": {
+          "archived": false,
+          "cateId": Number(this.form.get('productCategory').value)
+        },
+        "costPrice": this.form.get('costPrice').value,
+        "price": this.form.get('price').value,
+        "productCode": this.form.get('productCode').value,
+        "productDesc": this.form.get('productDes').value,
+        "productGuar": this.form.get('productGuarantee').value,
+        "productId":this.productId,
+        "productName": this.form.get('productName').value,
+        "stockInUnit":this.form.get('productQuantity').value,
+        "suppliers": {
+          "archived": false,
+          "supplierId": Number(this.form.get('productSupplier').value)
+        },
+        "branch": {
+          "archived": false,
+          "branchId": Number(this.form.get('productBranch').value)
+        }
+      }
+      }
+  
+      console.log(body,"body");
+      
+      this.products.updateProduct(body).toPromise().
+      then(s => { this.toastr.success(s.message);
+      this.onReset();    
+      this.getAllProductsMethod();
+      this.router.navigate(['products/get']);})
+      .catch((e) => {       
+        if(e.error.error){
+        this.toastr.error(e.error.error);
+      }
+      else{
+        this.toastr.error(e.error);
+      }
+    });
+    
   }
 
   createNewCategory(){
