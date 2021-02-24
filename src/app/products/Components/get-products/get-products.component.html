@@ -53,7 +53,7 @@
                                     <td>{{table.suppliers?.name||"null"}}</td>
                                     <td>{{table.branch?.name||"null"}}</td>
                                     <td >
-                                        <i class="fa pointer fa-edit" (click)="onEdit(table.productId)" ></i>&nbsp;&nbsp;
+                                        <i class="fa pointer fa-edit" (click)="onEdit(table.productId,i)" ></i>&nbsp;&nbsp;
                                         <i class="fa pointer fa-trash" (click)="onDelete(table.productId)"></i>
                                     </td>
                                 </tr>

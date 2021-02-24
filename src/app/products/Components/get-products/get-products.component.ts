@@ -61,8 +61,23 @@ console.log(this.sortedData);
     })
 }
 
-onEdit(id){
-
+onEdit(id,i){
+  this.sortedData[i].productCode
+  this.router.navigate(['products/create',
+  {
+    productId:id,
+    name:this.sortedData[i].productName,
+    cost:this.sortedData[i].costPrice,
+    price:this.sortedData[i].price,
+    code:this.sortedData[i].productCode,
+    desc:this.sortedData[i].productDesc,
+    guar:this.sortedData[i].productGuar,
+    category:this.sortedData[i].category.cateId,
+    branch:this.sortedData[i].branch.branchId,
+    brand:this.sortedData[i].brands.brandId,
+    supplier:this.sortedData[i].suppliers.supplierId,
+    quantity:this.sortedData[i].stockInUnit
+  }])
 }
 
 onDelete(id){

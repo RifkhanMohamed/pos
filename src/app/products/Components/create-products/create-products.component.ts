@@ -15,6 +15,7 @@ import { Branch } from "../../../branches/Modals/branch";
 import { Unit } from "../../../units/Modals/unit";
 
 import { ToastrService } from "ngx-toastr";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-products',
@@ -49,8 +50,11 @@ allBranchesName=[];
 unitsValues=[];
 unitIds=[];
 
+productId:number;
+forUpdate=false;
+
 findProductCodeValue:any;
-  constructor(private toastr: ToastrService,private fb: FormBuilder,private units:UnitsService,private products: ProductsService,private brands: BrandsService,private categories: CategoriesService,private suppliers: SuppliersService,private branches: BranchesService) {
+  constructor(private toastr: ToastrService,private fb: FormBuilder,private units:UnitsService,private products: ProductsService,private brands: BrandsService,private categories: CategoriesService,private suppliers: SuppliersService,private branches: BranchesService,private route:ActivatedRoute) {
     this.getAllProductsMethod();
     this.getAllBrandsMethod();
     this.getAllCategoriesMethod();
@@ -104,6 +108,27 @@ findProductCodeValue:any;
    }
    
   ngOnInit(): void {
+
+    if(this.route.snapshot.paramMap.get('productId')){
+      this.productId=Number(this.route.snapshot.paramMap.get('productId'));
+      this.form.get('productCode').setValue(this.route.snapshot.paramMap.get('code'));
+      this.form.get('productName').setValue(this.route.snapshot.paramMap.get('name'));
+      this.form.get('productDes').setValue(this.route.snapshot.paramMap.get('desc'));
+      this.form.get('costPrice').setValue(this.route.snapshot.paramMap.get('cost'));
+      this.form.get('price').setValue(this.route.snapshot.paramMap.get('price'));
+      this.form.get('productGuarantee').setValue(this.route.snapshot.paramMap.get('guar'));
+      this.form.get('productCategory').setValue(this.route.snapshot.paramMap.get('category'));
+      this.form.get('productBrand').setValue(this.route.snapshot.paramMap.get('brand'));
+      this.form.get('productSupplier').setValue(this.route.snapshot.paramMap.get('supplier'));
+      this.form.get('productBranch').setValue(this.route.snapshot.paramMap.get('branch'));
+      this.form.get('productQuantity').setValue(this.route.snapshot.paramMap.get('quantity'));
+      this.forUpdate=true;
+      this.form.controls['productCode'].disable();
+    }
+    else{
+      this.forUpdate=false;
+      this.form.controls['productCode'].enable();
+    }
   }
 
   getAllProductsMethod(){
@@ -587,6 +612,10 @@ this.allSuppliersTelNo=[];
     this.onReset();    
     this.getAllProductsMethod();})
     .catch((s) => { this.toastr.error("Error", s['error']['message']); console.log(s);});
+  }
+
+  updateProduct(){
+
   }
 
   createNewCategory(){
