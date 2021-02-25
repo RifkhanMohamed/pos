@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Customer } from "../Modals/customer";
 import { CustomersService } from "../Services/customers.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-customers',
@@ -14,15 +15,81 @@ import { CustomersService } from "../Services/customers.service";
 export class CustomersComponent implements OnInit {
   getAllCustomers:Customer[];
   sortedData: Customer[];
+  getPhone=[];
+  getMail=[];
 
   searchText:any;
   p:number=1;
   total:number;
   itemsPerPage:number=10;
-  constructor(private customer:CustomersService) { }
+  customerId:number;
+ 
+
+  customerForm=new FormGroup({});
+  customerEditForm=new FormGroup({});
+
+  constructor(private customer:CustomersService,private fb:FormBuilder,private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getAllCustomersMethod();
+    this.getAllPhones();
+    this.getAllMails();
+    this.customerForm=this.fb.group({
+      customerName:new FormControl('',[Validators.required]),
+      customerAddress:new FormControl('',[Validators.required]),
+      customerTelNo:new FormControl('',[Validators.required,Validators.pattern("[0-9 ]{10}"),this.uniqueTelNo.bind(this)]),
+      customerEmail:new FormControl('',[Validators.required,Validators.email,this.uniqueEmail.bind(this)])
+    });
+    this.customerEditForm=this.fb.group({
+      customerEditName:new FormControl('',[Validators.required]),
+      customerEditAddress:new FormControl('',[Validators.required]),
+      customerEditTelNo:new FormControl('',[Validators.required,Validators.pattern("[0-9 ]{10}")]),
+      customerEditEmail:new FormControl('',[Validators.required,Validators.email])
+    });
+  }
+
+  uniqueTelNo(control: FormControl){
+    if(this.getPhone.indexOf(control.value)!=-1){
+      return {'customerTelNoIsNotAllowed':true}
+    }
+    return null;
+  }
+
+  uniqueEmail(control: FormControl){
+    if(this.getMail.indexOf(control.value)!=-1){
+      return {'customerEmailIsNotAllowed':true}
+    }
+    return null;
+  }
+
+  createNewCustomer(){
+    let body={
+      "address": this.customerForm.get('customerAddress').value,
+      "mail": this.customerForm.get('customerEmail').value,
+      "name": this.customerForm.get('customerName').value,
+      "phone": this.customerForm.get('customerTelNo').value  
+  }
+
+  this.customer.createCustomer(body).toPromise()
+  .then(res=>{
+    this.toastr.success(res.message);
+    this.getAllCustomersMethod();
+    this.getAllPhones();
+    this.getAllMails();
+    this.customerForm.reset();
+  })
+  .catch(e=>{
+    if(e.error.error){
+      this.toastr.error(e.error.error);
+    }
+    else{
+      this.toastr.error(e.error);
+    }
+  })
+  }
+
+  updateCustomer(){
+
   }
 
   getAllCustomersMethod(){
@@ -36,6 +103,28 @@ export class CustomersComponent implements OnInit {
     .catch(e=>{
       console.log(e);
     });
+  }
+
+  getAllPhones(){
+    this.customer.getAllPhones().toPromise()
+    .then(res=>{
+      this.getPhone=res;
+    })
+    .catch(e=>{
+      console.log(e);
+      
+    })
+  }
+
+  getAllMails(){
+    this.customer.getAllMail().toPromise()
+    .then(res=>{
+      this.getMail=res;
+    })
+    .catch(e=>{
+      console.log(e);
+      
+    })
   }
 
   sortData(sort: Sort) {
@@ -63,11 +152,29 @@ export class CustomersComponent implements OnInit {
   }
   
   onEdit(id,i){
-
+    this.customerId=Number(id);
+    this.customerEditForm.get('customerEditName').setValue(this.sortedData[i].name);
+    this.customerEditForm.get('customerEditAddress').setValue(this.sortedData[i].address);
+    this.customerEditForm.get('customerEditTelNo').setValue(this.sortedData[i].phone);
+    this.customerEditForm.get('customerEditEmail').setValue(this.sortedData[i].mail);
   }
 
   onDelete(id){
-
+    this.customer.deleteCustomer(id).toPromise()
+    .then(res=>{
+      this.toastr.success(res.message);
+      this.getAllCustomersMethod();
+      this.getAllPhones();
+      this.getAllMails();
+    })
+    .catch(e=>{
+      if(e.error.error){
+        this.toastr.error(e.error.error);
+      }
+      else{
+        this.toastr.error(e.error);
+      }
+    })
   }
 
   onNavigate(id){

@@ -29,22 +29,8 @@ export class GetSuppliersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllSuppliersMethod();
-
-    this.suppliers.getAllMail().toPromise()
-    .then(res=>{
-      this.getMail=res;
-    })
-    .catch(e=>{
-      console.log(e);
-    });
-
-    this.suppliers.getAllPhone().toPromise()
-    .then(res=>{
-      this.getPhone=res;
-    })
-    .catch(e=>{
-      console.log(e);
-    });
+    this.getAllPhones();
+    this.getAllMails();
 
     this.supplierForm=this.fb.group({
       supplierAddress:new FormControl(''),
@@ -61,6 +47,26 @@ export class GetSuppliersComponent implements OnInit {
       supplierEditEmail:new FormControl('',[Validators.required,Validators.email]),
       supplierEditFaxNo:new FormControl('')
     })
+  }
+
+  getAllPhones(){
+    this.suppliers.getAllPhone().toPromise()
+    .then(res=>{
+      this.getPhone=res;
+    })
+    .catch(e=>{
+      console.log(e);
+    });
+  }
+
+  getAllMails(){
+    this.suppliers.getAllMail().toPromise()
+    .then(res=>{
+      this.getMail=res;
+    })
+    .catch(e=>{
+      console.log(e);
+    });
   }
 
   getAllSuppliersMethod(){
@@ -116,8 +122,21 @@ export class GetSuppliersComponent implements OnInit {
       "telNo": this.supplierForm.get('supplierTelNo').value
     }
     this.suppliers.createSupplier(body).toPromise()
-    .then(s=>{this.toastr.success("Supplier "+this.supplierForm.get('supplierName').value+" has successfully created.",s['message']);this.getAllSuppliersMethod();})
-    .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
+    .then(s=>{
+      this.toastr.success(s.message);
+      this.getAllSuppliersMethod();
+      this.getAllPhones();
+      this.getAllMails();
+      this.supplierForm.reset();
+    })
+    .catch(e=>{ 
+      if(e.error.error){
+        this.toastr.error(e.error.error);
+      }
+      else{
+        this.toastr.error(e.error);
+      }
+    });
   }
 
   updateSupplier(){
@@ -136,6 +155,9 @@ export class GetSuppliersComponent implements OnInit {
     .then(res=>{
       this.toastr.success(res.message);
       this.getAllSuppliersMethod();
+      this.getAllPhones();
+      this.getAllMails();
+      this.supplierEditForm.reset();
     })
     .catch(e=>{
       if(e.error.error){
@@ -161,6 +183,8 @@ export class GetSuppliersComponent implements OnInit {
     .then(res=>{
       this.toastr.success(res.message);
       this.getAllSuppliersMethod();
+      this.getAllPhones();
+      this.getAllMails();
     })
     .catch(e=>{
       if(e.error.error){

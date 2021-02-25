@@ -255,6 +255,8 @@ console.log(this.unitIds,"this.unitIds");
     .then(s=>{
       this.toastr.success(s.message);
       this.getAllBranchesMethod();
+      this.branchEditForm.reset();
+      this.unitsValues=[];
     })
     .catch(e=>{
       if(e.error.error){
@@ -285,12 +287,7 @@ console.log(this.unitIds,"this.unitIds");
 }); 
   }
   onResetBranch(){
-    this.branchForm.get('branchAddress').patchValue('');
-    this.branchForm.get('branchEmail').patchValue('');
-    this.branchForm.get('branchFaxNo').patchValue('');
-    this.branchForm.get('branchName').patchValue('');
-    this.branchForm.get('branchTelNo').patchValue('');
-    this.branchForm.get('branchUnit').patchValue('');
+    this.branchForm.reset();
     this.unitsValues=[];
   }
 

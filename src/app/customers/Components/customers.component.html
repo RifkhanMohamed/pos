@@ -4,7 +4,7 @@
             <div class="Content-wrapper">
                 <div class="row">
                     <div class="col-md-3">
-                        <button id="printButton1" class="btn btn-primary" (click)="addNew()">Add New</button>
+                        <button id="printButton1" class="btn btn-primary" data-target="#customerModal" data-toggle="modal">Add New</button>
                     </div>
                     <div class="col-md-9">
                         <input id="printInput" type="text" class="form-control-sm form-control" [(ngModel)]="searchText" placeholder="Search Customer" >
@@ -40,7 +40,7 @@
                             <td>{{table.account}}</td>
                             <td>
                                 <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
-                                <i class="fa pointer fa-edit" (click)="onEdit(table.customerId,i)" data-target="#branchEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.customerId,i)" data-target="#customerEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
                                 <i class="fa pointer fa-trash" (click)="onDelete(table.customerId)"></i>
                             </td>
                         </tr>
@@ -67,7 +67,7 @@
                         <pagination-controls  (pageChange)="p=$event"></pagination-controls>
                     </div>
                     <div class="col-sm-2 text-right">
-                        Total Branches - {{total}}
+                        Total Customers - {{total}}
                     </div>
                 </div> 
             </div>
@@ -80,3 +80,103 @@
     </div>
 
 </div>
+
+    <!-- Customer Modal -->
+    <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="customerForm" [formGroup]="customerForm">
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label>
+                        <input type="text" class="form-control" formControlName="customerName" [ngClass]="{'is-invalid':customerForm.get('customerName').touched && customerForm.get('customerName').invalid}">
+                        <div *ngIf="customerForm.get('customerName').touched&&customerForm.get('customerName').invalid" class="invalid-feedback">
+                            <div *ngIf="customerForm.get('customerName').errors.required">Customer Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerAddress">Customer Address</label>
+                        <input type="text" class="form-control" formControlName="customerAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerTelNo">Customer Phone Number</label>
+                        <input type="text" class="form-control" formControlName="customerTelNo"  [ngClass]="{'is-invalid':customerForm.get('customerTelNo').touched && customerForm.get('customerTelNo').invalid}">
+                        <div *ngIf="customerForm.get('customerTelNo').touched&&customerForm.get('customerTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="customerForm.get('customerTelNo').errors.required" >Customer Phone Number is required</div>
+                            <div *ngIf="customerForm.get('customerTelNo').errors.customerTelNoIsNotAllowed" >Phone Number must be uniqueness</div>
+                            <div *ngIf="customerForm.get('customerTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEmail">Customer Email</label>
+                        <input type="text" class="form-control" formControlName="customerEmail"  [ngClass]="{'is-invalid':customerForm.get('customerEmail').touched && customerForm.get('customerEmail').invalid}">
+                        <div *ngIf="customerForm.get('customerEmail').touched&&customerForm.get('customerEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="customerForm.get('customerEmail').errors.required" >Customer Email is required</div>
+                            <div *ngIf="customerForm.get('customerEmail').errors.customerEmailIsNotAllowed" >Email must be uniqueness</div>
+                            <div *ngIf="customerForm.get('customerEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!customerForm.valid" (click)="createNewCustomer()">Add New</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          <!-- Supplier Modal -->
+    <div class="modal fade" id="customerEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form action="" name="customerEditForm" [formGroup]="customerEditForm">
+                    <div class="form-group">
+                        <label for="customerEditName">Customer Name</label>
+                        <input type="text" class="form-control" formControlName="customerEditName" [ngClass]="{'is-invalid':customerEditForm.get('customerEditName').touched && customerEditForm.get('customerEditName').invalid}">
+                        <div *ngIf="customerEditForm.get('customerEditName').touched&&customerEditForm.get('customerEditName').invalid" class="invalid-feedback">
+                            <div *ngIf="customerEditForm.get('customerEditName').errors.required">Customer Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEditAddress">Customer Address</label>
+                        <input type="text" class="form-control" formControlName="customerEditAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEditTelNo">Customer Phone Number</label>
+                        <input type="text" class="form-control" formControlName="customerEditTelNo"  [ngClass]="{'is-invalid':customerEditForm.get('customerEditTelNo').touched && customerEditForm.get('customerEditTelNo').invalid}">
+                        <div *ngIf="customerEditForm.get('customerEditTelNo').touched&&customerEditForm.get('customerEditTelNo').invalid" class="invalid-feedback">
+                            <div *ngIf="customerEditForm.get('customerEditTelNo').errors.required" >Customer Phone Number is required</div>
+                            <div *ngIf="customerEditForm.get('customerEditTelNo').errors.pattern" >Invalid Phone Number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEditEmail">Customer Email</label>
+                        <input type="text" class="form-control" formControlName="customerEditEmail"  [ngClass]="{'is-invalid':customerEditForm.get('customerEditEmail').touched && customerEditForm.get('customerEditEmail').invalid}">
+                        <div *ngIf="customerEditForm.get('customerEditEmail').touched&&customerEditForm.get('customerEditEmail').invalid" class="invalid-feedback">
+                            <div *ngIf="customerEditForm.get('customerEditEmail').errors.required" >Supplier Email is required</div>
+                            <div *ngIf="customerEditForm.get('customerEditEmail').errors.email" >Invalid Email</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" [disabled]="!customerEditForm.valid" (click)="updateCustomer()">Update</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
