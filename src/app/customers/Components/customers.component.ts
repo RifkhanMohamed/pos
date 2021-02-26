@@ -173,8 +173,9 @@ export class CustomersComponent implements OnInit {
 
   }
   
-  onEdit(id,i){
+  onEdit(id){
     this.customerId=Number(id);
+    let i=this.sortedData.findIndex(x=>x.customerId==id);
     this.customerEditForm.get('customerEditName').setValue(this.sortedData[i].name);
     this.customerEditForm.get('customerEditAddress').setValue(this.sortedData[i].address);
     this.customerEditForm.get('customerEditTelNo').setValue(this.sortedData[i].phone);

@@ -191,8 +191,9 @@ console.log(this.unitIds,"this.unitIds");
     .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
   }
 
-  onEdit(id,i){
+  onEdit(id){
     this.branchId=Number(id);
+    let i=this.sortedData.findIndex(x=>x.branchId==id)
     this.unitsValues=[];
     for(var j=0;j<this.sortedData[i].unit.length;j++){
       this.unitsValues.push({

@@ -39,7 +39,7 @@
                             <td>{{table.email}}</td>
                             <td>{{table?.faxNo ||"null"}}</td>
                             <td>
-                                <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId,i)" data-target="#supplierEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
+                                <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId)" data-target="#supplierEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
                                 <i class="fa pointer fa-trash" (click)="onDelete(table.supplierId)"></i>
                             </td>
                         </tr>

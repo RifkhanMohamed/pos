@@ -61,8 +61,8 @@ console.log(this.sortedData);
     })
 }
 
-onEdit(id,i){
-  this.sortedData[i].productCode
+onEdit(id){
+  let i=this.sortedData.findIndex(x=>x.productId==id);
   this.router.navigate(['products/create',
   {
     productId:id,

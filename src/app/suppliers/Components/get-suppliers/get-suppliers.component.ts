@@ -169,8 +169,9 @@ export class GetSuppliersComponent implements OnInit {
     });
   }
 
-  onEdit(id,i){
+  onEdit(id){
     this.supplierId=Number(id);
+    let i=this.sortedData.findIndex(x=>x.supplierId==id);
     this.supplierEditForm.get('supplierEditAddress').setValue(this.sortedData[i].address);
     this.supplierEditForm.get('supplierEditEmail').setValue(this.sortedData[i].email);
     this.supplierEditForm.get('supplierEditFaxNo').setValue(this.sortedData[i].faxNo);
