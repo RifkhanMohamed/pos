@@ -12,15 +12,20 @@ import { MatTableModule } from "@angular/material/table";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
+import { AccountDetailsComponent } from './Components/accounts-details/account-details/account-details.component';
 const routes: Routes = [
   {
     path: '',
     component: CustomersComponent
+  },
+  {
+    path: 'accounts',
+    component: AccountDetailsComponent
   }
 ];
 
 @NgModule({
-  declarations: [CustomersComponent],
+  declarations: [CustomersComponent, AccountDetailsComponent],
   imports: [
     CommonModule,
     [RouterModule.forChild(routes)],

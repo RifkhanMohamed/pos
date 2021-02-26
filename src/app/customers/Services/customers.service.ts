@@ -14,6 +14,8 @@ export class CustomersService {
   private CreateCustomer=this.url+"/customer/create";
   private DeleteCustomer=this.url+"/customer/delete";
   private UpdateCustomer=this.url+"/customer/update";
+  private GetAccount=this.url+"/account/get/customer";
+  private GetAllCustomerId=this.url+"/customerId/get/all";
 
   constructor(private http: HttpClient) { }
   
@@ -41,5 +43,13 @@ export class CustomersService {
 
   updateCustomer(body): Observable<any>{
     return this.http.put<any>(this.UpdateCustomer,body);
+  }
+
+  getAccount(customerId): Observable<any>{
+    return this.http.get<any>(`${this.GetAccount}/${customerId}`);
+  }
+
+  getAllCustomerId(): Observable<any>{
+    return this.http.get<any>(this.GetAllCustomerId);
   }
 }

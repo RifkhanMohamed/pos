@@ -27,7 +27,7 @@
                             <th mat-sort-header="phone">Phone</th>
                             <th mat-sort-header="mail">Email</th>
                             <th mat-sort-header="address">Address</th>
-                            <th mat-sort-header="account">Account</th>
+                            <th mat-sort-header="account">Amount Payable</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -37,7 +37,7 @@
                             <td>{{table.phone}}</td>
                             <td>{{table.mail}}</td>
                             <td>{{table.address}}</td>
-                            <td>{{table.account}}</td>
+                            <td style="text-align: right;">{{table.account|currency:'LKR':'symbol-narrow'}}</td>
                             <td>
                                 <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
                                 <i class="fa pointer fa-edit" (click)="onEdit(table.customerId)" data-target="#customerEditModal" data-toggle="modal"></i>&nbsp;&nbsp;

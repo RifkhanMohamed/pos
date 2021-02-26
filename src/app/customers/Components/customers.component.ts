@@ -4,6 +4,7 @@ import {Sort} from '@angular/material/sort';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Customer } from "../Modals/customer";
+import { Accounts } from "../Modals/account";
 import { CustomersService } from "../Services/customers.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -17,6 +18,7 @@ export class CustomersComponent implements OnInit {
   sortedData: Customer[];
   getPhone=[];
   getMail=[];
+  getCustomerId=[];
 
   searchText:any;
   p:number=1;
@@ -28,12 +30,14 @@ export class CustomersComponent implements OnInit {
   customerForm=new FormGroup({});
   customerEditForm=new FormGroup({});
 
-  constructor(private customer:CustomersService,private fb:FormBuilder,private toastr: ToastrService) { }
+  constructor(private router:Router,private customer:CustomersService,private fb:FormBuilder,private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getAllCustomersMethod();
     this.getAllPhones();
     this.getAllMails();
+    this.getAllCustomerId();
+    
     this.customerForm=this.fb.group({
       customerName:new FormControl('',[Validators.required]),
       customerAddress:new FormControl('',[Validators.required]),
@@ -76,6 +80,7 @@ export class CustomersComponent implements OnInit {
     this.getAllCustomersMethod();
     this.getAllPhones();
     this.getAllMails();
+    this.getAllCustomerId();
     this.customerForm.reset();
   })
   .catch(e=>{
@@ -102,6 +107,7 @@ export class CustomersComponent implements OnInit {
     this.getAllCustomersMethod();
     this.getAllPhones();
     this.getAllMails();
+    this.getAllCustomerId();
     this.customerEditForm.reset();
   })
   .catch(e=>{
@@ -114,8 +120,8 @@ export class CustomersComponent implements OnInit {
   })
   }
 
-  getAllCustomersMethod(){
-    this.customer.getAllCustomers().toPromise()
+  async getAllCustomersMethod(){
+  await  this.customer.getAllCustomers().toPromise()
     .then(res=>{
       this.getAllCustomers=res as Customer[];
       console.log(this.getAllCustomers);
@@ -142,6 +148,18 @@ export class CustomersComponent implements OnInit {
     this.customer.getAllMail().toPromise()
     .then(res=>{
       this.getMail=res;
+    })
+    .catch(e=>{
+      console.log(e);
+      
+    })
+  }
+
+  async getAllCustomerId(){
+   await this.customer.getAllCustomerId().toPromise()
+    .then(res=>{
+      this.getCustomerId=res;
+      this.getAccounts();
     })
     .catch(e=>{
       console.log(e);
@@ -201,7 +219,33 @@ export class CustomersComponent implements OnInit {
   }
 
   onNavigate(id){
+    this.router.navigate(['customer/accounts',{id:id}]);
+  }
 
+ async getAccounts(){
+    for(var i=0;i<this.getCustomerId.length;i++){
+   await   this.customer.getAccount(this.getCustomerId[i]).toPromise()
+      .then(res=>{
+        if(res.length>0){
+          var temp=0;
+          for(var j=0;j<res.length;j++){
+           var balance=(res[j].debit-res[j].credit);
+           temp=temp+balance;
+          }
+          console.log(balance,temp);
+          let g=this.sortedData.findIndex(x=>x.customerId==this.getCustomerId[i])
+          this.sortedData[g].account=temp;
+        }
+        else{
+          let g=this.sortedData.findIndex(x=>x.customerId==this.getCustomerId[i])
+          this.sortedData[g].account=0;
+        }
+      })
+      .catch(e=>{
+        console.log(e);
+      })
+    }
+    
   }
 
 }
