@@ -89,7 +89,29 @@ export class CustomersComponent implements OnInit {
   }
 
   updateCustomer(){
-
+    let body={
+      "address": this.customerEditForm.get('customerEditAddress').value,
+      "mail": this.customerEditForm.get('customerEditEmail').value,
+      "name": this.customerEditForm.get('customerEditName').value,
+      "phone": this.customerEditForm.get('customerEditTelNo').value,
+      "customerId": this.customerId
+  }
+  this.customer.updateCustomer(body).toPromise()
+  .then(res=>{
+    this.toastr.success(res.message);
+    this.getAllCustomersMethod();
+    this.getAllPhones();
+    this.getAllMails();
+    this.customerEditForm.reset();
+  })
+  .catch(e=>{
+    if(e.error.error){
+      this.toastr.error(e.error.error);
+    }
+    else{
+      this.toastr.error(e.error);
+    }
+  })
   }
 
   getAllCustomersMethod(){

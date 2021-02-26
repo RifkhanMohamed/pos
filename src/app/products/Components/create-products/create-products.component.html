@@ -7,7 +7,7 @@
                     <form action="" name="form" [formGroup]="form">
                         <div class="form-group">
                             <label for="productCode">Product Code</label>
-                            <input type="text" class="form-control" formControlName="productCode" [disabled]="true"  [ngClass]="{'is-invalid':form.get('productCode').touched && form.get('productCode').invalid}">
+                            <input type="text" class="form-control" formControlName="productCode" [ngClass]="{'is-invalid':form.get('productCode').touched && form.get('productCode').invalid}">
                             <div *ngIf="form.get('productCode').touched&&form.get('productCode').invalid" class="invalid-feedback">
                                 <div *ngIf="form.get('productCode').errors.required" >Product Code is required</div>
                                 <div *ngIf="form.get('productCode').errors.productCodeIsNotAllowed" >Product Code must be uniqueness</div>

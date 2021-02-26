@@ -123,11 +123,11 @@ findProductCodeValue:any;
       this.form.get('productBranch').setValue(this.route.snapshot.paramMap.get('branch'));
       this.form.get('productQuantity').setValue(this.route.snapshot.paramMap.get('quantity'));
       this.forUpdate=true;
-      this.form.controls['productCode'].disable();
+      // this.form.controls['productCode'].disable();
     }
     else{
       this.forUpdate=false;
-      this.form.controls['productCode'].enable();
+      // this.form.controls['productCode'].enable();
     }
   }
 
@@ -219,7 +219,9 @@ this.allSuppliersTelNo=[];
 
   uniqueProductCode(control: FormControl){
     if(this.allProductCodes.indexOf(control.value)!=-1){
-      return {'productCodeIsNotAllowed':true}
+      if(this.forUpdate==false){
+        return {'productCodeIsNotAllowed':true}
+      }
     }
     return null;
   }
@@ -978,7 +980,7 @@ this.allSuppliersTelNo=[];
         "cateName": this.categoryForm.get('categoryName').value
     }
     this.categories.createCategory(body).toPromise().
-    then(s=>{this.toastr.success("Category "+this.categoryForm.get('categoryName').value+" has successfully created.",s['message']);this.getAllCategoriesMethod();})
+    then(s=>{this.toastr.success("Category "+this.categoryForm.get('categoryName').value+" has successfully created.",s['message']);this.getAllCategoriesMethod();this.onResetCategory();})
     .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
   }
 
@@ -988,7 +990,7 @@ this.allSuppliersTelNo=[];
         "brandName": this.brandForm.get('brandName').value
     }
     this.brands.createBrand(body).toPromise().
-    then(s=>{this.toastr.success("Brand "+this.brandForm.get('brandName').value+" has successfully created.",s['message']);this.getAllBrandsMethod();})
+    then(s=>{this.toastr.success("Brand "+this.brandForm.get('brandName').value+" has successfully created.",s['message']);this.getAllBrandsMethod();this.onResetBrand();})
     .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
   }
 
@@ -1002,7 +1004,7 @@ this.allSuppliersTelNo=[];
       "telNo": this.supplierForm.get('supplierTelNo').value
     }
     this.suppliers.createSupplier(body).toPromise()
-    .then(s=>{this.toastr.success("Supplier "+this.supplierForm.get('supplierName').value+" has successfully created.",s['message']);this.getAllSuppliersMethod();})
+    .then(s=>{this.toastr.success("Supplier "+this.supplierForm.get('supplierName').value+" has successfully created.",s['message']);this.getAllSuppliersMethod();this.onResetSupplier();})
     .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
   }
 
@@ -1055,35 +1057,28 @@ console.log(this.unitIds,"this.unitIds");
         "name": this.unitForm.get('unitName').value,
     }
     this.units.createUnit(body).toPromise()
-    .then(s=>{this.toastr.success("Unit "+this.unitForm.get('unitName').value+" has successfully created.",s['message']);this.getAllUnitMethod();})
+    .then(s=>{this.toastr.success("Unit "+this.unitForm.get('unitName').value+" has successfully created.",s['message']);this.getAllUnitMethod();this.onResetUnit();})
     .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
   }
 
   onReset(){
-    this.form.get('costPrice').patchValue('');
-    this.form.get('price').patchValue('');
-    this.form.get('productCode').patchValue('');
-    this.form.get('productDes').patchValue('');
-    this.form.get('productGuarantee').patchValue('');
-    this.form.get('productName').patchValue('');
-    this.form.get('productBrand').patchValue('');
-    this.form.get('productSupplier').patchValue('');
-    this.form.get('productCategory').patchValue('');
-    this.form.get('productBranch').patchValue('');
-    this.form.get('productQuantity').patchValue('');
+    this.form.reset();
   }
   
   onResetBranch(){
-    this.branchForm.get('branchAddress').patchValue('');
-    this.branchForm.get('branchEmail').patchValue('');
-    this.branchForm.get('branchFaxNo').patchValue('');
-    this.branchForm.get('branchName').patchValue('');
-    this.branchForm.get('branchTelNo').patchValue('');
-    this.branchForm.get('branchUnit').patchValue('');
+    this.branchForm.reset();
     this.unitsValues=[];
   }
-
+  onResetSupplier(){
+    this.supplierForm.reset();
+  }
   onResetCategory(){
-    this.categoryForm.get('categoryName').patchValue('');
+    this.categoryForm.reset();
+  }
+  onResetUnit(){
+    this.unitForm.reset();
+  }
+  onResetBrand(){
+    this.branchForm.reset();
   }
 }

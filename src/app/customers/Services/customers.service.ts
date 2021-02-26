@@ -13,6 +13,7 @@ export class CustomersService {
   private GetAllMail=this.url+"/customerMail/get/all";
   private CreateCustomer=this.url+"/customer/create";
   private DeleteCustomer=this.url+"/customer/delete";
+  private UpdateCustomer=this.url+"/customer/update";
 
   constructor(private http: HttpClient) { }
   
@@ -36,5 +37,9 @@ export class CustomersService {
   deleteCustomer(customerId): Observable<any>{
     const url=`${this.DeleteCustomer}/${customerId}`;
     return this.http.post<any>(url, {responseType: 'text'});
+  }
+
+  updateCustomer(body): Observable<any>{
+    return this.http.put<any>(this.UpdateCustomer,body);
   }
 }
