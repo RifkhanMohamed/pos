@@ -4,6 +4,7 @@ import { SuppliersService } from "../../Services/suppliers.service";
 import {Sort} from '@angular/material/sort';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-get-suppliers',
@@ -22,7 +23,7 @@ export class GetSuppliersComponent implements OnInit {
   supplierForm=new FormGroup({});
   supplierEditForm=new FormGroup({});
   supplierId:number;
-  constructor(private suppliers:SuppliersService,private fb:FormBuilder,private toastr: ToastrService) 
+  constructor(private suppliers:SuppliersService,private fb:FormBuilder,private toastr: ToastrService,private router:Router) 
   {
     
   }
@@ -199,6 +200,10 @@ export class GetSuppliersComponent implements OnInit {
         this.toastr.error(e.error);
       }
     })
+  }
+
+  onNavigate(id){
+    this.router.navigate(['suppliers/accounts']);
   }
 }
 

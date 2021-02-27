@@ -1,6 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavBarServicesService } from "src/app/_services/nav-bar-services.service";
+import { TokenStorageService } from "../app/_services/token-storage.service";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,7 +10,7 @@ import { NavBarServicesService } from "src/app/_services/nav-bar-services.servic
 export class AppComponent implements OnInit {
   title = 'pos';
   visible=false;
-  constructor(private router: Router,public nav :NavBarServicesService) {
+  constructor(private router: Router,public nav :NavBarServicesService,private tokenStorageService:TokenStorageService) {
 
   }
   ngOnInit(): void {
@@ -36,5 +37,12 @@ export class AppComponent implements OnInit {
   }
   navigateSuppliers(){
     this.router.navigate(['suppliers']);
+  }
+  navigateHome(){
+    this.router.navigate(['home']);
+  }
+  logout(){
+    this.tokenStorageService.signOut();
+    this.router.navigate(['login']);
   }
 }
