@@ -273,10 +273,10 @@ console.log(this.unitIds,"this.unitIds");
     this.unitsValues=[];
   }
 
-  onDelete(id){
+  onDelete(){
     let branchName;
-    this.getAllBranches.filter(s=>s.branchId==id).forEach(x=>branchName=x.name);
-   this.branch.deleteBranch(id).toPromise().
+    this.getAllBranches.filter(s=>s.branchId==this.branchId).forEach(x=>branchName=x.name);
+   this.branch.deleteBranch(this.branchId).toPromise().
    then(s => { this.toastr.success(s.message);this.getAllBranchesMethod();})
    .catch((e) => {       
      if(e.error.error){
@@ -300,6 +300,10 @@ console.log(this.unitIds,"this.unitIds");
   this.units.createUnit(body).toPromise()
   .then(s=>{this.toastr.success("Unit "+this.unitForm.get('unitName').value+" has successfully created.",s['message']);this.getAllUnitMethod();})
   .catch(s=>{ this.toastr.error("Error", s['error']['message']); console.log(s);})
+  }
+
+  onPass(id){
+    this.branchId=id;
   }
 }
 

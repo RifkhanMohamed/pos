@@ -1,1 +1,45 @@
-<p>account-details works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jumbotron">
+                <h3 style="text-align: center;"><hr>{{name}}'s Accounts Details<hr></h3>
+                <br>
+                <div *ngIf="total!=0">
+                <input id="printInput" type="text" class="form-control-sm form-control" [(ngModel)]="searchText" placeholder="Search" >
+                <br>
+                
+                    <table id="tableDatas" matSort (matSortChange)="sortData($event)">
+                        <thead>
+                            <tr>
+                                <th mat-sort-header="createdDate">Date</th>
+                                <th mat-sort-header="description">Details</th>
+                                <th mat-sort-header="transectionType">Transaction Type</th>
+                                <th mat-sort-header="debit">Debit</th>
+                                <th mat-sort-header="credit">Credit</th>
+                                <th mat-sort-header="purchaseAmount">Purchase</th>
+                                <th mat-sort-header="salesAmount">Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let table of sortedData | filter:searchText; let i = index">
+                                <td>{{table.createdDate}}</td>
+                                <td>{{table.description}}</td>
+                                <td>{{table.transectionType.name}}</td>
+                                <td style="text-align: right;">{{table.debit|currency:'LKR':'symbol-narrow'}}</td>
+                                <td style="text-align: right;">{{table.credit|currency:'LKR':'symbol-narrow'}}</td>
+                                <td style="text-align: right;">{{table.purchaseAmount|currency:'LKR':'symbol-narrow'}}</td>
+                                <td style="text-align: right;">{{table.salesAmount|currency:'LKR':'symbol-narrow'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="total==0">
+                    <div class="text-center" >
+                        <h1>No Results Found</h1>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
