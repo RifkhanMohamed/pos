@@ -54,7 +54,7 @@
                                     <td>{{table.branch?.name||"null"}}</td>
                                     <td >
                                         <i class="fa pointer fa-edit" (click)="onEdit(table.productId)" ></i>&nbsp;&nbsp;
-                                        <i class="fa pointer fa-trash" (click)="onDelete(table.productId)"></i>
+                                        <i class="fa pointer fa-trash" (click)="onPass(table.productId)"  data-target="#deleteModal" data-toggle="modal"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -100,3 +100,24 @@
         
     </div>
 </div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content">
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <label for="unitName">Are you sure that you want to permanently delete this product?</label>
+        </div>
+  
+    <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div class="form-group">
+                <button class="btn btn-primary"  (click)="onDelete()" data-dismiss="modal">Yes</button>
+                &nbsp;<button class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

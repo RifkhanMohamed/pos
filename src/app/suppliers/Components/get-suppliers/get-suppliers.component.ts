@@ -179,8 +179,12 @@ export class GetSuppliersComponent implements OnInit {
     this.supplierEditForm.get('supplierEditTelNo').setValue(this.sortedData[i].telNo);
   }
 
-  onDelete(id){
-    this.suppliers.deleteSupplier(id).toPromise()
+  onPass(id){
+    this.supplierId=id;
+  }
+
+  onDelete(){
+    this.suppliers.deleteSupplier(this.supplierId).toPromise()
     .then(res=>{
       this.toastr.success(res.message);
       this.getAllSuppliersMethod();

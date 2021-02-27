@@ -35,6 +35,6 @@ export class AppComponent implements OnInit {
     this.router.navigate(['customer']);
   }
   navigateSuppliers(){
-    this.router.navigate(['suppliers/get']);
+    this.router.navigate(['suppliers']);
   }
 }

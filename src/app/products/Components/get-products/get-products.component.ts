@@ -17,6 +17,7 @@ export class GetProductsComponent implements OnInit {
 getAllProducts:Products[];
 sortedData: Products[];
 rowData : any;
+productId:number;
 searchText:any;
 p:number=1;
 total:number;
@@ -80,10 +81,14 @@ onEdit(id){
   }])
 }
 
-onDelete(id){
+onPass(id){
+  this.productId=id;
+}
+
+onDelete(){
   let productName;
-  this.getAllProducts.filter(s=>s.productId==id).forEach(x=>productName=x.productName);
- this.products.deleteProduct(id).toPromise().
+  this.getAllProducts.filter(s=>s.productId==this.productId).forEach(x=>productName=x.productName);
+ this.products.deleteProduct(this.productId).toPromise().
  then(s => { this.toastr.success( productName+" Successfully Deleted..!");this.getAllProductsMethod();})
  .catch((s) => { this.toastr.error("Error", s['error']['message']); console.log(s);}); 
 }

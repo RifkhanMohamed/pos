@@ -40,7 +40,7 @@
                             <td>{{table?.faxNo ||"null"}}</td>
                             <td>
                                 <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId)" data-target="#supplierEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
-                                <i class="fa pointer fa-trash" (click)="onDelete(table.supplierId)"></i>
+                                <i class="fa pointer fa-trash" (click)="onPass(table.supplierId)" data-target="#deleteModal" data-toggle="modal"></i>
                             </td>
                         </tr>
                     </tbody>
@@ -181,6 +181,27 @@
                 <div class="form-group">
                     <button class="btn btn-primary" [disabled]="!supplierEditForm.valid" (click)="updateSupplier()">Update</button>
                     &nbsp;<button class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Modal -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+          <div class="modal-content">
+      
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <label for="unitName">Are you sure that you want to permanently delete this supplier?</label>
+            </div>
+      
+        <!-- Modal Footer -->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary"  (click)="onDelete()" data-dismiss="modal">Yes</button>
+                    &nbsp;<button class="btn btn-secondary" data-dismiss="modal">No</button>
                 </div>
             </div>
           </div>

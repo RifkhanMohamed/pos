@@ -14,7 +14,8 @@ import { FormsModule } from '@angular/forms';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { TagInputModule } from 'ngx-chips';
-import { authInterceptorProviders } from 'src/app/_helpers/auth.interceptor'
+import { authInterceptorProviders } from 'src/app/_helpers/auth.interceptor';
+import { AccountDetailsComponent } from './Components/account-details/account-details/account-details.component'
 
 const routes: Routes = [
   {
@@ -22,14 +23,15 @@ const routes: Routes = [
     component: GetSuppliersComponent
   },
   {
-    path: 'get',
-    component: GetSuppliersComponent
+    path: 'accounts',
+    component: AccountDetailsComponent
   }
 ];
 
 @NgModule({
   declarations: [
-    GetSuppliersComponent
+    GetSuppliersComponent,
+    AccountDetailsComponent
   ],
   imports: [
     [RouterModule.forChild(routes)],

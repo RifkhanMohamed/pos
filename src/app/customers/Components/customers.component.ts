@@ -200,8 +200,12 @@ export class CustomersComponent implements OnInit {
     this.customerEditForm.get('customerEditEmail').setValue(this.sortedData[i].mail);
   }
 
-  onDelete(id){
-    this.customer.deleteCustomer(id).toPromise()
+  onPass(id){
+    this.customerId=id;
+  }
+
+  onDelete(){
+    this.customer.deleteCustomer(this.customerId).toPromise()
     .then(res=>{
       this.toastr.success(res.message);
       this.getAllCustomersMethod();
@@ -247,6 +251,8 @@ export class CustomersComponent implements OnInit {
     }
     
   }
+
+
 
 }
 
