@@ -1,1 +1,36 @@
-<p>home works!</p>
+<!-- <div class="container"> -->
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="Content-wrapper1">
+                        
+                            <section class="cards">
+                                
+                                    <div *ngFor="let table of Categories" class="cards-content">
+                                        {{table.cateName}}
+                                      </div>
+                                
+                            </section>
+                           
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="productsDiv" class="Content-wrapper2" [style.height]="scrHeight">
+                        <div *ngFor="let table of Categories">
+                            {{table.cateName}}
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="Content-wrapper">
+                <p>hello3</p>
+            </div>
+        </div>
+    </div>
+<!-- </div> -->
