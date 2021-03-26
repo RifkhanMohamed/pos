@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavBarServicesService } from "src/app/_services/nav-bar-services.service";
 import { HostListener } from "@angular/core";
 import { HomeService } from "../../Services/home.service";
+import { ProductsService } from "../../../products/Services/products.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-home',
@@ -10,6 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 })
 export class HomeComponent implements OnInit {
   Categories=[];
+  Products=[];
   scrHeight:any;
   scrWidth:any;
   @HostListener('window:resize', ['$event'])
@@ -22,7 +24,7 @@ export class HomeComponent implements OnInit {
 
 
 
-  constructor(private nav: NavBarServicesService,private home:HomeService) {
+  constructor(private nav: NavBarServicesService,private home:HomeService,private productService:ProductsService) {
     this.nav.show();
     this.getScreenSize();
     
@@ -39,6 +41,15 @@ export class HomeComponent implements OnInit {
       console.log(e);
       
     });
+
+    this.productService.getAllProducts().toPromise()
+    .then(res=>{
+      this.Products=res;
+    })
+    .catch(e=>{
+      console.log(e);
+      
+    })
   }
 
 }

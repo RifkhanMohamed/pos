@@ -3,26 +3,42 @@
         <div class="col-8">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="Content-wrapper1">
-                        
-                            <section class="cards">
-                                
-                                    <div *ngFor="let table of Categories" class="cards-content">
-                                        {{table.cateName}}
-                                      </div>
-                                
-                            </section>
-                           
+                    <div class="Content-wrapper1" style="overflow-y: scroll;">
+                        <div class="row" style="margin: 10px;">
+                                <div *ngFor="let category of Categories" style="padding: 5px;">
+                                    <div class="square pointer">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <div class="content">
+                                            {{category.cateName}}
+                                        </div>
+                                    </div>
+                                </div> 
+                        </div>
                     </div>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="productsDiv" class="Content-wrapper2" [style.height]="scrHeight">
-                        <div *ngFor="let table of Categories">
-                            {{table.cateName}}
-                          </div>
+                    <div  class="Content-wrapper2" [style.height]="scrHeight" style="overflow-y: scroll;">
+                        <div class="row" style="margin: 10px;">
+                            <div *ngFor="let product of Products" style="padding: 5px;">
+                                <div class="square pointer">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <div class="content">
+                                        {{product.productName}}
+                                        <br>
+                                        <div style="font-size: smaller;">
+                                            {{product.productCode}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                    </div>
                     </div>
                 </div>
             </div>
