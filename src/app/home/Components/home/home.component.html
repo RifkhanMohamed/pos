@@ -45,7 +45,9 @@
         </div>
         <div class="col-4">
             <div class="Content-wrapper">
-                <p>hello3</p>
+                <div *ngIf=retrievedImage>
+                    <img width="120" height="150" [src]="retrievedImage">
+                </div>
             </div>
         </div>
     </div>

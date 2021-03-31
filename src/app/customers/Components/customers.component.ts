@@ -19,7 +19,8 @@ export class CustomersComponent implements OnInit {
   getPhone=[];
   getMail=[];
   getCustomerId=[];
-
+  selectedFile: File;
+  photoId=null;
   searchText:any;
   p:number=1;
   total:number;
@@ -37,12 +38,13 @@ export class CustomersComponent implements OnInit {
     this.getAllPhones();
     this.getAllMails();
     this.getAllCustomerId();
-    
+  
     this.customerForm=this.fb.group({
       customerName:new FormControl('',[Validators.required]),
       customerAddress:new FormControl('',[Validators.required]),
       customerTelNo:new FormControl('',[Validators.required,Validators.pattern("[0-9 ]{10}"),this.uniqueTelNo.bind(this)]),
-      customerEmail:new FormControl('',[Validators.required,Validators.email,this.uniqueEmail.bind(this)])
+      customerEmail:new FormControl('',[Validators.required,Validators.email,this.uniqueEmail.bind(this)]),
+      customerPhoto:new FormControl('')
     });
     this.customerEditForm=this.fb.group({
       customerEditName:new FormControl('',[Validators.required]),
@@ -66,15 +68,31 @@ export class CustomersComponent implements OnInit {
     return null;
   }
 
-  createNewCustomer(){
-    let body={
-      "address": this.customerForm.get('customerAddress').value,
-      "mail": this.customerForm.get('customerEmail').value,
-      "name": this.customerForm.get('customerName').value,
-      "phone": this.customerForm.get('customerTelNo').value  
-  }
+  async createNewCustomer(){
+    await this.uploadPhoto();
+    let body;
+    if(this.photoId==null){
+      body={
+        "address": this.customerForm.get('customerAddress').value,
+        "mail": this.customerForm.get('customerEmail').value,
+        "name": this.customerForm.get('customerName').value,
+        "phone": this.customerForm.get('customerTelNo').value 
+    }
+    }
+    else{
+      body={
+        "address": this.customerForm.get('customerAddress').value,
+        "mail": this.customerForm.get('customerEmail').value,
+        "name": this.customerForm.get('customerName').value,
+        "phone": this.customerForm.get('customerTelNo').value,
+        "image":{
+          "id":this.photoId
+        }  
+    }
+    }
 
-  this.customer.createCustomer(body).toPromise()
+
+  await this.customer.createCustomer(body).toPromise()
   .then(res=>{
     this.toastr.success(res.message);
     this.getAllCustomersMethod();
@@ -82,6 +100,8 @@ export class CustomersComponent implements OnInit {
     this.getAllMails();
     this.getAllCustomerId();
     this.customerForm.reset();
+    this.photoId=null;
+    this.selectedFile=null;
   })
   .catch(e=>{
     if(e.error.error){
@@ -252,7 +272,24 @@ export class CustomersComponent implements OnInit {
     
   }
 
+ async uploadPhoto(){
+   if(this.selectedFile){
+    const uploadImageData = new FormData();
+    uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
+   await this.customer.createImage(uploadImageData).toPromise()
+    .then(res=>{
+      this.photoId=res.body;
+      this.toastr.success("Successfully Uploaded!");
+    })
+    .catch(e=>{
+      this.toastr.error(e);
+    });
+   }
+  }
 
+  public onFileChanged(event) {
+    this.selectedFile = event.target.files[0];
+  }
 
 }
 

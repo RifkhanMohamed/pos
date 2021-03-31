@@ -9,10 +9,15 @@ export class HomeService {
   readonly url= environment.base_url;
   
   private GetAllCategories=this.url+"/category/get/all";
+  private GetImage=this.url+"/image/getById";
 
   constructor(private http: HttpClient) { }
 
   getAllCategories(): Observable<any>{
     return this.http.get<any>(this.GetAllCategories);
+  }
+  getImage(id): Observable<any>{
+    const url=`${this.GetImage}/${id}`
+    return this.http.get<any>(url);
   }
 }

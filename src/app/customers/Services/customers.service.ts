@@ -17,6 +17,7 @@ export class CustomersService {
   private GetAccount=this.url+"/account/get/customer";
   private GetAllCustomerId=this.url+"/customerId/get/all";
   private GetCustomerById=this.url+"/customer/get";
+  private CreateImage=this.url+"/image/upload";
 
   constructor(private http: HttpClient) { }
   
@@ -56,5 +57,9 @@ export class CustomersService {
 
   getCustomerById(customerId): Observable<any>{
     return this.http.get<any>(`${this.GetCustomerById}/${customerId}`);
+  }
+
+  createImage(uploadImageData): Observable<any>{
+    return this.http.post<any>(`${this.CreateImage}`, uploadImageData, { observe: 'response' });
   }
 }

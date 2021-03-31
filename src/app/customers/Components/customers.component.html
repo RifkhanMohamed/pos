@@ -118,6 +118,10 @@
                             <div *ngIf="customerForm.get('customerEmail').errors.email" >Invalid Email</div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="customerPhoto">Customer Photo</label>
+                        <input type="file" class="form-control" formControlName="customerPhoto" (change)="onFileChanged($event)">
+                    </div>
                 </form>
             </div>
       

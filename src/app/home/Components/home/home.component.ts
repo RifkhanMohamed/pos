@@ -14,12 +14,14 @@ export class HomeComponent implements OnInit {
   Products=[];
   scrHeight:any;
   scrWidth:any;
+  retrievedImage: any;
+  retrieveResonse:any;
+  base64Data: any;
   @HostListener('window:resize', ['$event'])
    getScreenSize(event?) {
         this.scrHeight = (window.innerHeight-250).toString()+'px';
         this.scrWidth = window.innerWidth;
         console.log(this.scrHeight, this.scrWidth);
-
   }
 
 
@@ -49,6 +51,20 @@ export class HomeComponent implements OnInit {
     .catch(e=>{
       console.log(e);
       
+    });
+    this.getImage();
+  }
+
+  getImage(){
+    this.home.getImage(1).toPromise()
+    .then(res=>{
+      this.retrieveResonse = res;
+      this.base64Data = this.retrieveResonse.picByte;
+      this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+    })
+    .catch(e=>{
+      console.log(e);
+
     })
   }
 
