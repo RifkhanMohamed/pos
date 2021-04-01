@@ -7,6 +7,7 @@ import { Customer } from "../Modals/customer";
 import { Accounts } from "../Modals/account";
 import { CustomersService } from "../Services/customers.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { HomeService } from "../../home/Services/home.service";
 
 @Component({
   selector: 'app-customers',
@@ -20,18 +21,27 @@ export class CustomersComponent implements OnInit {
   getMail=[];
   getCustomerId=[];
   selectedFile: File;
-  photoId=null;
+  photoId=1;
   searchText:any;
   p:number=1;
   total:number;
   itemsPerPage:number=10;
   customerId:number;
+  x = 0;
+  y = 0;
+  scrHeight:any;
+  scrWidth:any;
+  retrievedImage: any;
+  retrieveResonse:any;
+  base64Data: any;
+  getPhotoId:number;
+  forWork=false;
  
 
   customerForm=new FormGroup({});
   customerEditForm=new FormGroup({});
 
-  constructor(private router:Router,private customer:CustomersService,private fb:FormBuilder,private toastr: ToastrService) { }
+  constructor(private router:Router,private customer:CustomersService,private fb:FormBuilder,private toastr: ToastrService,private service: HomeService ) { }
 
   ngOnInit(): void {
     this.getAllCustomersMethod();
@@ -54,6 +64,43 @@ export class CustomersComponent implements OnInit {
     });
   }
 
+  getImage(){
+    this.service.getImage(this.getPhotoId).toPromise()
+    .then(res=>{
+      this.retrieveResonse = res;
+      this.base64Data = this.retrieveResonse.picByte;
+      this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+    })
+    .catch(e=>{
+      console.log(e);
+    })
+  }
+  onMouse1(e){
+    var target = e.target || e.srcElement || e.currentTarget;
+    if (document.getElementById('tableDatas').contains(target)){
+      this.forWork=true;
+      document.getElementById('imageDiv').style.visibility = "visible";
+    }
+    else{
+      console.log("b");
+      this.forWork=false;
+      document.getElementById('imageDiv').style.visibility = "hidden";
+    }
+  }
+  async onMouse(e,id){
+    if(this.forWork){
+      this.getPhotoId=id;
+      await this.getImage();
+      document.addEventListener('mousemove', this.onMouseUpdate);
+    }
+  }
+
+  onMouseUpdate(e) {
+    this.x = e.pageX;
+    this.y = e.pageY;
+    document.getElementById('imageDiv').style.left=(this.x+5)+"px";
+    document.getElementById('imageDiv').style.top=(this.y+5)+"px";
+  }
   uniqueTelNo(control: FormControl){
     if(this.getPhone.indexOf(control.value)!=-1){
       return {'customerTelNoIsNotAllowed':true}
@@ -71,15 +118,6 @@ export class CustomersComponent implements OnInit {
   async createNewCustomer(){
     await this.uploadPhoto();
     let body;
-    if(this.photoId==null){
-      body={
-        "address": this.customerForm.get('customerAddress').value,
-        "mail": this.customerForm.get('customerEmail').value,
-        "name": this.customerForm.get('customerName').value,
-        "phone": this.customerForm.get('customerTelNo').value 
-    }
-    }
-    else{
       body={
         "address": this.customerForm.get('customerAddress').value,
         "mail": this.customerForm.get('customerEmail').value,
@@ -89,7 +127,7 @@ export class CustomersComponent implements OnInit {
           "id":this.photoId
         }  
     }
-    }
+
 
 
   await this.customer.createCustomer(body).toPromise()
@@ -100,7 +138,7 @@ export class CustomersComponent implements OnInit {
     this.getAllMails();
     this.getAllCustomerId();
     this.customerForm.reset();
-    this.photoId=null;
+    this.photoId=1;
     this.selectedFile=null;
   })
   .catch(e=>{
@@ -250,6 +288,8 @@ export class CustomersComponent implements OnInit {
     for(var i=0;i<this.getCustomerId.length;i++){
    await   this.customer.getAccount(this.getCustomerId[i]).toPromise()
       .then(res=>{
+        console.log(res,"res");
+        
         if(res.length>0){
           var temp=0;
           for(var j=0;j<res.length;j++){

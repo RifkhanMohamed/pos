@@ -12,7 +12,7 @@ const routes: Routes = [
   {path : "brands", loadChildren : () => import('./brands/brands.module').then(m=>m.BrandsModule),canActivate: [CheckUserOrAdminOrSuperAdmin]},
   {path : "signup", loadChildren : () => import('./signup/sign-up.module').then(m=>m.SignUpModule)},
   {path : "home", loadChildren : () => import('./home/home.module').then(m=>m.HomeModule)},
-  {path : "customer", loadChildren : () => import('./customers/customers.module').then(m=>m.CustomersModule)},
+  {path : "customer", loadChildren : () => import('./customers/customers.module').then(m=>m.CustomersModule),canActivate: [CheckUserOrAdminOrSuperAdmin]},
   {path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
 

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (mouseover)="onMouse1($event)">
     <div class="row">
         <div class="col-sm-6">
             <div class="Content-wrapper">
@@ -20,32 +20,35 @@
             <h3 style="text-align: center;"><hr> Customers <hr></h3>
             <br>
             <div *ngIf="total!=0">
-                <table id="tableDatas" matSort (matSortChange)="sortData($event)">
-                    <thead>
-                        <tr>
-                            <th mat-sort-header="name">Name</th>
-                            <th mat-sort-header="phone">Phone</th>
-                            <th mat-sort-header="mail">Email</th>
-                            <th mat-sort-header="address">Address</th>
-                            <th mat-sort-header="account">Amount Payable</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let table of sortedData  | filter:searchText | paginate:{itemsPerPage:itemsPerPage,currentPage:p,totalItems: total}; let i = index">
-                            <td>{{table.name}}</td>
-                            <td>{{table.phone}}</td>
-                            <td>{{table.mail}}</td>
-                            <td>{{table.address}}</td>
-                            <td style="text-align: right;">{{table.account|currency:'LKR':'symbol-narrow'}}</td>
-                            <td>
-                                <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
-                                <i class="fa pointer fa-edit" (click)="onEdit(table.customerId)" data-target="#customerEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
-                                <i class="fa pointer fa-trash" (click)="onPass(table.customerId)" data-target="#deleteModal" data-toggle="modal"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: scroll;">
+                    <table id="tableDatas" matSort (matSortChange)="sortData($event)">
+                        <thead>
+                            <tr>
+                                <th mat-sort-header="name">Name</th>
+                                <th mat-sort-header="phone">Phone</th>
+                                <th mat-sort-header="mail">Email</th>
+                                <th mat-sort-header="address">Address</th>
+                                <th mat-sort-header="account">Amount Payable</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr (mouseover)="onMouse($event,table.image)"   *ngFor="let table of sortedData  | filter:searchText | paginate:{itemsPerPage:itemsPerPage,currentPage:p,totalItems: total}; let i = index">
+                                <td>{{table.name}}</td>
+                                <td>{{table.phone}}</td>
+                                <td>{{table.mail}}</td>
+                                <td>{{table.address}}</td>
+                                <td style="text-align: right;">{{table.account|currency:'LKR':'symbol-narrow'}}</td>
+                                <td>
+                                    <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
+                                    <i class="fa pointer fa-edit" (click)="onEdit(table.customerId)" data-target="#customerEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
+                                    <i class="fa pointer fa-trash" (click)="onPass(table.customerId)" data-target="#deleteModal" data-toggle="modal"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <br>
                 <div class="row">
                     <div class="col-sm-4">
@@ -205,3 +208,7 @@
           </div>
         </div>
       </div>
+
+    <div id="imageDiv" style="position: absolute; z-index: 10; visibility: hidden;">
+        <img width="120" height="150" [src]="retrievedImage">
+    </div>
