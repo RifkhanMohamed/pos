@@ -13,6 +13,7 @@ import { Category } from "../../../categories/Modals/category";
 import { Supplier } from "../../../suppliers/Modals/supplier";
 import { Branch } from "../../../branches/Modals/branch";
 import { Unit } from "../../../units/Modals/unit";
+import { CustomersService } from "./../../../customers/Services/customers.service";
 
 import { ToastrService } from "ngx-toastr";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -49,12 +50,14 @@ allBranchTelNo=[];
 allBranchesName=[];
 unitsValues=[];
 unitIds=[];
+selectedFile:any;
+photoId=1;
 
 productId:number;
 forUpdate=false;
 
 findProductCodeValue:any;
-  constructor(private toastr: ToastrService,private fb: FormBuilder,private units:UnitsService,private products: ProductsService,private brands: BrandsService,private categories: CategoriesService,private suppliers: SuppliersService,private branches: BranchesService,private route:ActivatedRoute,private router:Router) {
+  constructor(private toastr: ToastrService,private fb: FormBuilder,private units:UnitsService,private products: ProductsService,private brands: BrandsService,private categories: CategoriesService,private suppliers: SuppliersService,private branches: BranchesService,private route:ActivatedRoute,private router:Router,private customer:CustomersService) {
     this.getAllProductsMethod();
     this.getAllBrandsMethod();
     this.getAllCategoriesMethod();
@@ -68,6 +71,7 @@ findProductCodeValue:any;
       productDes:new FormControl(''),
       costPrice:new FormControl ('', [Validators.required,RxwebValidators.numeric({allowDecimal:true,isFormat:true})]),
       price:new FormControl ('', [Validators.required,RxwebValidators.numeric({allowDecimal:true,isFormat:true})]),
+      productImage:new FormControl(''),
       productGuarantee:new FormControl(''),
       productCategory:new FormControl(''),
       productBrand:new FormControl(''),
@@ -130,6 +134,25 @@ findProductCodeValue:any;
       // this.form.controls['productCode'].enable();
     }
   }
+
+  public onFileChanged(event) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  async uploadPhoto(){
+    if(this.selectedFile){
+     const uploadImageData = new FormData();
+     uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
+    await this.customer.createImage(uploadImageData).toPromise()
+     .then(res=>{
+       this.photoId=res.body;
+       this.toastr.success("Successfully Uploaded!");
+     })
+     .catch(e=>{
+       this.toastr.error(e);
+     });
+    }
+   }
 
   getAllProductsMethod(){
     this.allProductCodes=[];
@@ -283,9 +306,9 @@ this.allSuppliersTelNo=[];
   }
 
 
-  createNewProduct(){
+  async createNewProduct(){
     let body;
-
+    await this.uploadPhoto();
     if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productCategory').value=='' && this.form.get('productBranch').value=='' ){
       body={
         "archived": false,
@@ -295,7 +318,10 @@ this.allSuppliersTelNo=[];
         "productDesc": this.form.get('productDes').value,
         "stockInUnit":this.form.get('productQuantity').value,
         "productGuar": this.form.get('productGuarantee').value,
-        "productName": this.form.get('productName').value
+        "productName": this.form.get('productName').value,
+        "image": {
+          "id": this.photoId
+        }
       }
     }
     else if(this.form.get('productCategory').value=='' && this.form.get('productBrand').value=='' && this.form.get('productBranch').value==''){
@@ -311,6 +337,9 @@ this.allSuppliersTelNo=[];
         "suppliers": {
           "archived": false,
           "supplierId": Number(this.form.get('productSupplier').value)
+        },
+        "image": {
+          "id": this.photoId
         }
       }
     }
@@ -327,7 +356,10 @@ this.allSuppliersTelNo=[];
         "productDesc": this.form.get('productDes').value,
         "stockInUnit":this.form.get('productQuantity').value,
         "productGuar": this.form.get('productGuarantee').value,
-        "productName": this.form.get('productName').value
+        "productName": this.form.get('productName').value,
+        "image": {
+          "id": this.photoId
+        }
       }
     }
     else if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productBranch').value==''){
@@ -343,7 +375,10 @@ this.allSuppliersTelNo=[];
         "productDesc": this.form.get('productDes').value,
         "stockInUnit":this.form.get('productQuantity').value,
         "productGuar": this.form.get('productGuarantee').value,
-        "productName": this.form.get('productName').value
+        "productName": this.form.get('productName').value,
+        "image": {
+          "id": this.photoId
+        }
       }
     }
     else if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productCategory').value==''){
@@ -359,7 +394,10 @@ this.allSuppliersTelNo=[];
         "productDesc": this.form.get('productDes').value,
         "stockInUnit":this.form.get('productQuantity').value,
         "productGuar": this.form.get('productGuarantee').value,
-        "productName": this.form.get('productName').value
+        "productName": this.form.get('productName').value,
+        "image": {
+          "id": this.photoId
+        }
       }
     }
     else if(this.form.get('productCategory').value=='' && this.form.get('productBranch').value==''){
@@ -379,7 +417,10 @@ this.allSuppliersTelNo=[];
        "suppliers": {
          "archived": false,
          "supplierId": Number(this.form.get('productSupplier').value)
-       }
+       },
+       "image": {
+        "id": this.photoId
+      }
      }
     }
     else if(this.form.get('productCategory').value=='' && this.form.get('productBrand').value==''){
@@ -399,7 +440,10 @@ this.allSuppliersTelNo=[];
      "suppliers": {
        "archived": false,
        "supplierId": Number(this.form.get('productSupplier').value)
-     }
+     },
+     "image": {
+      "id": this.photoId
+    }
    }
     }
     else if(this.form.get('productCategory').value=='' && this.form.get('productSupplier').value==''){
@@ -419,6 +463,9 @@ this.allSuppliersTelNo=[];
    "branch": {
     "archived": false,
     "branchId": Number(this.form.get('productBranch').value)
+  },
+  "image": {
+    "id": this.photoId
   }
  }
     }
@@ -439,7 +486,10 @@ this.allSuppliersTelNo=[];
    "suppliers": {
      "archived": false,
      "supplierId": Number(this.form.get('productSupplier').value)
-   }
+   },
+   "image": {
+    "id": this.photoId
+  }
  }
     }
     else if(this.form.get('productBranch').value==''&& this.form.get('productSupplier').value==''){
@@ -459,6 +509,9 @@ this.allSuppliersTelNo=[];
    "brands": {
     "archived": false,
     "brandId": Number(this.form.get('productBrand').value)
+  },
+  "image": {
+    "id": this.photoId
   }
  }
     }
@@ -479,6 +532,9 @@ this.allSuppliersTelNo=[];
    "branch": {
     "archived": false,
     "branchId": Number(this.form.get('productBranch').value)
+  },
+  "image": {
+    "id": this.photoId
   }
  }
     }
@@ -503,6 +559,9 @@ this.allSuppliersTelNo=[];
         "branch": {
           "archived": false,
           "branchId": Number(this.form.get('productBranch').value)
+        },
+        "image": {
+          "id": this.photoId
         }
       }
     }
@@ -527,6 +586,9 @@ this.allSuppliersTelNo=[];
         "branch": {
           "archived": false,
           "branchId": Number(this.form.get('productBranch').value)
+        },
+        "image": {
+          "id": this.photoId
         }
       }
     }
@@ -551,6 +613,9 @@ this.allSuppliersTelNo=[];
       "branch": {
         "archived": false,
         "branchId": Number(this.form.get('productBranch').value)
+      },
+      "image": {
+        "id": this.photoId
       }
     }
     }
@@ -575,6 +640,9 @@ this.allSuppliersTelNo=[];
         "suppliers": {
           "archived": false,
           "supplierId": Number(this.form.get('productSupplier').value)
+        },
+        "image": {
+          "id": this.photoId
         }
       }
     }
@@ -603,6 +671,9 @@ this.allSuppliersTelNo=[];
       "branch": {
         "archived": false,
         "branchId": Number(this.form.get('productBranch').value)
+      },
+      "image": {
+        "id": this.photoId
       }
     }
     }
@@ -610,15 +681,20 @@ this.allSuppliersTelNo=[];
     console.log(body,"body");
     
     this.products.createProduct(body).toPromise().
-    then(s => { this.toastr.success("Product "+ this.form.get('productName').value +" has successfully created.",s['message']); console.log(s);
+    then(s => { 
+    this.toastr.success("Product "+ this.form.get('productName').value +" has successfully created.",s['message']); console.log(s);
     this.onReset();    
-    this.getAllProductsMethod();})
-    .catch((s) => { this.toastr.error("Error", s['error']['message']); console.log(s);});
+    this.getAllProductsMethod();
+    this.photoId=1;
+  })
+    .catch(s => { 
+      this.toastr.error("Error", s['error']['message']); console.log(s);
+    });
   }
 
-  updateProduct(){
+  async updateProduct(){
       let body;
-  
+      await this.uploadPhoto();
       if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productCategory').value=='' && this.form.get('productBranch').value=='' ){
         body={
           "archived": false,
@@ -629,7 +705,10 @@ this.allSuppliersTelNo=[];
           "stockInUnit":this.form.get('productQuantity').value,
           "productGuar": this.form.get('productGuarantee').value,
           "productName": this.form.get('productName').value,
-          "productId":this.productId
+          "productId":this.productId,
+          "image": {
+            "id": this.photoId
+          }
         }
       }
       else if(this.form.get('productCategory').value=='' && this.form.get('productBrand').value=='' && this.form.get('productBranch').value==''){
@@ -646,6 +725,9 @@ this.allSuppliersTelNo=[];
           "suppliers": {
             "archived": false,
             "supplierId": Number(this.form.get('productSupplier').value)
+          },
+          "image": {
+            "id": this.photoId
           }
         }
       }
@@ -663,7 +745,10 @@ this.allSuppliersTelNo=[];
           "stockInUnit":this.form.get('productQuantity').value,
           "productGuar": this.form.get('productGuarantee').value,
           "productId":this.productId,
-          "productName": this.form.get('productName').value
+          "productName": this.form.get('productName').value,
+          "image": {
+            "id": this.photoId
+          }
         }
       }
       else if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productBranch').value==''){
@@ -680,7 +765,10 @@ this.allSuppliersTelNo=[];
           "stockInUnit":this.form.get('productQuantity').value,
           "productGuar": this.form.get('productGuarantee').value,
           "productId":this.productId,
-          "productName": this.form.get('productName').value
+          "productName": this.form.get('productName').value,
+          "image": {
+            "id": this.photoId
+          }
         }
       }
       else if(this.form.get('productSupplier').value=='' && this.form.get('productBrand').value=='' && this.form.get('productCategory').value==''){
@@ -697,7 +785,10 @@ this.allSuppliersTelNo=[];
           "stockInUnit":this.form.get('productQuantity').value,
           "productGuar": this.form.get('productGuarantee').value,
           "productId":this.productId,
-          "productName": this.form.get('productName').value
+          "productName": this.form.get('productName').value,
+          "image": {
+            "id": this.photoId
+          }
         }
       }
       else if(this.form.get('productCategory').value=='' && this.form.get('productBranch').value==''){
@@ -718,7 +809,10 @@ this.allSuppliersTelNo=[];
          "suppliers": {
            "archived": false,
            "supplierId": Number(this.form.get('productSupplier').value)
-         }
+         },
+         "image": {
+          "id": this.photoId
+        }
        }
       }
       else if(this.form.get('productCategory').value=='' && this.form.get('productBrand').value==''){
@@ -739,7 +833,10 @@ this.allSuppliersTelNo=[];
        "suppliers": {
          "archived": false,
          "supplierId": Number(this.form.get('productSupplier').value)
-       }
+       },
+       "image": {
+        "id": this.photoId
+      }
      }
       }
       else if(this.form.get('productCategory').value=='' && this.form.get('productSupplier').value==''){
@@ -760,6 +857,9 @@ this.allSuppliersTelNo=[];
      "branch": {
       "archived": false,
       "branchId": Number(this.form.get('productBranch').value)
+    },
+    "image": {
+      "id": this.photoId
     }
    }
       }
@@ -781,7 +881,10 @@ this.allSuppliersTelNo=[];
      "suppliers": {
        "archived": false,
        "supplierId": Number(this.form.get('productSupplier').value)
-     }
+     },
+     "image": {
+      "id": this.photoId
+    }
    }
       }
       else if(this.form.get('productBranch').value==''&& this.form.get('productSupplier').value==''){
@@ -802,6 +905,9 @@ this.allSuppliersTelNo=[];
      "brands": {
       "archived": false,
       "brandId": Number(this.form.get('productBrand').value)
+    },
+    "image": {
+      "id": this.photoId
     }
    }
       }
@@ -823,6 +929,9 @@ this.allSuppliersTelNo=[];
      "branch": {
       "archived": false,
       "branchId": Number(this.form.get('productBranch').value)
+    },
+    "image": {
+      "id": this.photoId
     }
    }
       }
@@ -848,6 +957,9 @@ this.allSuppliersTelNo=[];
           "branch": {
             "archived": false,
             "branchId": Number(this.form.get('productBranch').value)
+          },
+          "image": {
+            "id": this.photoId
           }
         }
       }
@@ -873,6 +985,9 @@ this.allSuppliersTelNo=[];
           "branch": {
             "archived": false,
             "branchId": Number(this.form.get('productBranch').value)
+          },
+          "image": {
+            "id": this.photoId
           }
         }
       }
@@ -898,6 +1013,9 @@ this.allSuppliersTelNo=[];
         "branch": {
           "archived": false,
           "branchId": Number(this.form.get('productBranch').value)
+        },
+        "image": {
+          "id": this.photoId
         }
       }
       }
@@ -923,6 +1041,9 @@ this.allSuppliersTelNo=[];
           "suppliers": {
             "archived": false,
             "supplierId": Number(this.form.get('productSupplier').value)
+          },
+          "image": {
+            "id": this.photoId
           }
         }
       }
@@ -952,6 +1073,9 @@ this.allSuppliersTelNo=[];
         "branch": {
           "archived": false,
           "branchId": Number(this.form.get('productBranch').value)
+        },
+        "image": {
+          "id": this.photoId
         }
       }
       }

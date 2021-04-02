@@ -20,33 +20,36 @@
             <h3 style="text-align: center;"><hr> Suppliers <hr></h3>
             <br>
             <div *ngIf="total!=0">
-                <table id="tableDatas" matSort (matSortChange)="sortData($event)">
-                    <thead>
-                        <tr>
-                            <th mat-sort-header="name">Name</th>
-                            <th mat-sort-header="address">Address</th>
-                            <th mat-sort-header="telNo">Phone</th>
-                            <th mat-sort-header="email">Email</th>
-                            <th mat-sort-header="faxNo">Fax</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let table of sortedData  | filter:searchText | paginate:{itemsPerPage:itemsPerPage,currentPage:p,totalItems: total}; let i = index">
-                            <td>{{table.name}}</td>
-                            <td>{{table.address}}</td>
-                            <td>{{table.telNo}}</td>
-                            <td>{{table.email}}</td>
-                            <td>{{table?.faxNo ||"null"}}</td>
-                            <td>
-                                <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
-                                <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId)" data-target="#supplierEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
-                                <i class="fa pointer fa-trash" (click)="onPass(table.supplierId)" data-target="#deleteModal" data-toggle="modal"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-<br>
-                </table>
+                <div style="overflow-x: scroll;">
+                    <table id="tableDatas" matSort (matSortChange)="sortData($event)">
+                        <thead>
+                            <tr>
+                                <th mat-sort-header="name">Name</th>
+                                <th mat-sort-header="address">Address</th>
+                                <th mat-sort-header="telNo">Phone</th>
+                                <th mat-sort-header="email">Email</th>
+                                <th mat-sort-header="faxNo">Fax</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let table of sortedData  | filter:searchText | paginate:{itemsPerPage:itemsPerPage,currentPage:p,totalItems: total}; let i = index">
+                                <td>{{table.name}}</td>
+                                <td>{{table.address}}</td>
+                                <td>{{table.telNo}}</td>
+                                <td>{{table.email}}</td>
+                                <td>{{table?.faxNo ||"null"}}</td>
+                                <td>
+                                    <i class="fa pointer fa-list-alt" (click)="onNavigate(table.customerId)"></i>&nbsp;&nbsp;
+                                    <i class="fa pointer fa-edit" (click)="onEdit(table.supplierId)" data-target="#supplierEditModal" data-toggle="modal"></i>&nbsp;&nbsp;
+                                    <i class="fa pointer fa-trash" (click)="onPass(table.supplierId)" data-target="#deleteModal" data-toggle="modal"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+    <br>
+                    </table>
+                </div>
+
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="row">
@@ -84,7 +87,7 @@
           <div class="modal-content">
       
             <!-- Modal Body -->
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y: scroll;">
                 <form action="" name="supplierForm" [formGroup]="supplierForm">
                     <div class="form-group">
                         <label for="supplierName">Supplier Name</label>
@@ -139,7 +142,7 @@
           <div class="modal-content">
       
             <!-- Modal Body -->
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y: scroll;">
                 <form action="" name="supplierEditForm" [formGroup]="supplierEditForm">
                     <div class="form-group">
                         <label for="supplierEditName">Supplier Name</label>

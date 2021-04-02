@@ -21,7 +21,7 @@ export class ProductsService {
   }
 
   createProduct(body): Observable<any>{
-    return this.http.post<any>(`${this.CreateProduct}`,body)
+    return this.http.post(`${this.CreateProduct}`,body, {responseType: 'text'})
   }
 
   deleteProduct(productId): Observable<any> {
