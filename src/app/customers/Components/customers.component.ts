@@ -36,6 +36,8 @@ export class CustomersComponent implements OnInit {
   base64Data: any;
   getPhotoId:number;
   forWork=false;
+  forUpdatePhotoName:any;
+  // forUpdatePhotoId:number;
  
 
   customerForm=new FormGroup({});
@@ -60,7 +62,8 @@ export class CustomersComponent implements OnInit {
       customerEditName:new FormControl('',[Validators.required]),
       customerEditAddress:new FormControl('',[Validators.required]),
       customerEditTelNo:new FormControl('',[Validators.required,Validators.pattern("[0-9 ]{10}")]),
-      customerEditEmail:new FormControl('',[Validators.required,Validators.email])
+      customerEditEmail:new FormControl('',[Validators.required,Validators.email]),
+      customerEditPhoto:new FormControl('')
     });
   }
 
@@ -68,6 +71,8 @@ export class CustomersComponent implements OnInit {
     this.service.getImage(this.getPhotoId).toPromise()
     .then(res=>{
       this.retrieveResonse = res;
+      this.forUpdatePhotoName=this.retrieveResonse.name;
+      this.customerEditForm.get('customerEditPhoto').setValue(this.forUpdatePhotoName);
       this.base64Data = this.retrieveResonse.picByte;
       this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
     })
@@ -75,6 +80,7 @@ export class CustomersComponent implements OnInit {
       console.log(e);
     })
   }
+
   onMouse1(e){
     var target = e.target || e.srcElement || e.currentTarget;
     if (document.getElementById('tableDatas').contains(target)){
@@ -87,6 +93,7 @@ export class CustomersComponent implements OnInit {
       document.getElementById('imageDiv').style.visibility = "hidden";
     }
   }
+
   async onMouse(e,id){
     if(this.forWork){
       this.getPhotoId=id;
@@ -101,6 +108,7 @@ export class CustomersComponent implements OnInit {
     document.getElementById('imageDiv').style.left=(this.x+5)+"px";
     document.getElementById('imageDiv').style.top=(this.y+5)+"px";
   }
+
   uniqueTelNo(control: FormControl){
     if(this.getPhone.indexOf(control.value)!=-1){
       return {'customerTelNoIsNotAllowed':true}
@@ -140,6 +148,7 @@ export class CustomersComponent implements OnInit {
     this.customerForm.reset();
     this.photoId=1;
     this.selectedFile=null;
+    window.location.reload();
   })
   .catch(e=>{
     if(e.error.error){
@@ -151,13 +160,17 @@ export class CustomersComponent implements OnInit {
   })
   }
 
-  updateCustomer(){
+  async updateCustomer(){
+    await this.uploadPhoto();
     let body={
       "address": this.customerEditForm.get('customerEditAddress').value,
       "mail": this.customerEditForm.get('customerEditEmail').value,
       "name": this.customerEditForm.get('customerEditName').value,
       "phone": this.customerEditForm.get('customerEditTelNo').value,
-      "customerId": this.customerId
+      "customerId": this.customerId,
+      "image":{
+        "id":this.photoId
+      }  
   }
   this.customer.updateCustomer(body).toPromise()
   .then(res=>{
@@ -167,6 +180,9 @@ export class CustomersComponent implements OnInit {
     this.getAllMails();
     this.getAllCustomerId();
     this.customerEditForm.reset();
+    this.photoId=1;
+    this.selectedFile=null;
+    window.location.reload();
   })
   .catch(e=>{
     if(e.error.error){
@@ -249,26 +265,32 @@ export class CustomersComponent implements OnInit {
 
   }
   
-  onEdit(id){
+  async onEdit(id){
+    document.getElementById('imageDiv').style.visibility = "hidden";
     this.customerId=Number(id);
     let i=this.sortedData.findIndex(x=>x.customerId==id);
     this.customerEditForm.get('customerEditName').setValue(this.sortedData[i].name);
     this.customerEditForm.get('customerEditAddress').setValue(this.sortedData[i].address);
     this.customerEditForm.get('customerEditTelNo').setValue(this.sortedData[i].phone);
     this.customerEditForm.get('customerEditEmail').setValue(this.sortedData[i].mail);
+    this.photoId=this.sortedData[i].image;
+    await this.getImage();
   }
 
   onPass(id){
+    document.getElementById('imageDiv').style.visibility = "hidden";
     this.customerId=id;
   }
 
   onDelete(){
+    
     this.customer.deleteCustomer(this.customerId).toPromise()
     .then(res=>{
       this.toastr.success(res.message);
       this.getAllCustomersMethod();
       this.getAllPhones();
       this.getAllMails();
+      window.location.reload();
     })
     .catch(e=>{
       if(e.error.error){
