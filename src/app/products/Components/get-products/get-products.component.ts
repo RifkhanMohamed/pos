@@ -64,6 +64,36 @@ console.log(this.sortedData);
 
 onEdit(id){
   let i=this.sortedData.findIndex(x=>x.productId==id);
+  let catId;
+  let branchId;
+  let brandId;
+  let supplierId;
+  console.log(this.sortedData);
+  
+  if(this.sortedData[i].category==null){
+    catId="";
+  }
+  else{
+    catId=this.sortedData[i].category.cateId;
+  }
+  if(this.sortedData[i].branch==null){
+    branchId="";
+  }
+  else{
+    branchId=this.sortedData[i].branch.branchId;
+  }
+  if(this.sortedData[i].brands==null){
+    brandId=""
+  }
+  else{
+    brandId=this.sortedData[i].brands.brandId;
+  }
+  if(this.sortedData[i].suppliers==null){
+    supplierId=""
+  }
+  else{
+    supplierId=this.sortedData[i].suppliers.supplierId;
+  }
   this.router.navigate(['products/create',
   {
     productId:id,
@@ -73,10 +103,10 @@ onEdit(id){
     code:this.sortedData[i].productCode,
     desc:this.sortedData[i].productDesc,
     guar:this.sortedData[i].productGuar,
-    category:this.sortedData[i].category.cateId,
-    branch:this.sortedData[i].branch.branchId,
-    brand:this.sortedData[i].brands.brandId,
-    supplier:this.sortedData[i].suppliers.supplierId,
+    category:catId,
+    branch:branchId,
+    brand:brandId,
+    supplier:supplierId,
     quantity:this.sortedData[i].stockInUnit
   }])
 }

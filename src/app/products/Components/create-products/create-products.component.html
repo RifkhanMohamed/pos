@@ -61,6 +61,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <select  name="" id="" class="form-control" formControlName="productCategory">
+                                        <option value="">-select-</option>
                                         <option *ngFor="let category of getAllCategories" value={{category.cateId}}>{{category.cateName}}</option>
                                     </select>
                                 </div>
@@ -74,6 +75,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <select  name="" id="" class="form-control" formControlName="productBrand">
+                                        <option value="">-select-</option>
                                         <option *ngFor="let brand of getAllBrands" value={{brand.brandId}}>{{brand.brandName}}</option>
                                     </select>
                                 </div>
@@ -87,6 +89,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <select  name="" id="" class="form-control" formControlName="productBranch">
+                                        <option value="">-select-</option>
                                         <option *ngFor="let branch of getAllBranches" value={{branch.branchId}}>{{branch.name}}</option>
                                     </select>
                                 </div>
@@ -100,6 +103,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <select  name="" id="" class="form-control" formControlName="productSupplier">
+                                        <option value="">-select-</option>
                                         <option *ngFor="let supplier of getAllSuppliers" value={{supplier.supplierId}}>{{supplier.name}}</option>
                                     </select>
                                 </div>
