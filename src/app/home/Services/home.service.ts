@@ -10,6 +10,7 @@ export class HomeService {
   
   private GetAllCategories=this.url+"/category/get/all";
   private GetImage=this.url+"/image/getById";
+  private GetProductByCategory=this.url+"/product/get/byCategoryId";
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +19,10 @@ export class HomeService {
   }
   getImage(id): Observable<any>{
     const url=`${this.GetImage}/${id}`
+    return this.http.get<any>(url);
+  }
+  getProductByCategory(id):Observable<any>{
+    const url=`${this.GetProductByCategory}/${id}`
     return this.http.get<any>(url);
   }
 }

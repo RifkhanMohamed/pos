@@ -6,15 +6,26 @@
                     <div class="Content-wrapper1" style="overflow-y: scroll;">
                         <div class="row" style="margin: 10px;">
                                 <div *ngFor="let category of Categories" style="padding: 5px;">
-                                    <div class="square pointer">
+                                    <div class="square pointer" (click)="onCategory(category.cateId)">
                                         <span></span>
                                         <span></span>
                                         <span></span>
-                                        <div class="content">
+                                        <div class="content" >
                                             {{category.cateName}}
+                                        </div>  
+                                    </div>  
+                                </div> 
+                                <div style="padding: 5px;">
+                                    <div class="square pointer" (click)="getProducts()">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <div class="content" >
+                                            All
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
+                                
                         </div>
                     </div>
                 </div>
@@ -24,20 +35,23 @@
                 <div class="col-sm-12">
                     <div  class="Content-wrapper2" [style.height]="scrHeight" style="overflow-y: scroll;">
                         <div class="row" style="margin: 10px;">
-                            <!-- <div *ngFor="let product of Products" style="padding: 5px;">
-                                <div class="square pointer">
+                            <div *ngFor="let product of imageWith" style="padding: 5px;">
+                                <div class="pointer" >
+                                    <!-- <div *ngIf=retrievedImage> -->
+                                        <img width="100" height="100" style="border-radius: 50%;" [src]="product.image">
+                                    <!-- </div> -->
                                     <span></span>
                                     <span></span>
                                     <span></span>
                                     <div class="content">
-                                        {{product.productName}}
+                                        {{product.product.productName}}
                                         <br>
                                         <div style="font-size: smaller;">
-                                            {{product.productCode}}
+                                            {{product.product.productCode}}
                                         </div>
                                     </div>
                                 </div>
-                            </div>  -->
+                            </div> 
                     </div>
                     </div>
                 </div>
@@ -46,7 +60,7 @@
         <div class="col-4">
             <div class="Content-wrapper">
                 <!-- <div *ngIf=retrievedImage>
-                    <img width="120" height="150" [src]="retrievedImage">
+                    <img width="120" height="150" style="border-radius: 50%;" [src]="retrievedImage">
                 </div> -->
             </div>
         </div>

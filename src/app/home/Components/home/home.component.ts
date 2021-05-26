@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   retrievedImage: any;
   retrieveResonse:any;
   base64Data: any;
+  imageWith=[];
   @HostListener('window:resize', ['$event'])
    getScreenSize(event?) {
         this.scrHeight = (window.innerHeight-250).toString()+'px';
@@ -44,27 +45,56 @@ export class HomeComponent implements OnInit {
       
     });
 
-    this.productService.getAllProducts().toPromise()
+    this.getProducts();
+    
+  }
+
+  async getProducts(){
+    await this.productService.getAllProducts().toPromise()
     .then(res=>{
       this.Products=res;
+      this.getImage();
+    })
+    .catch(e=>{
+      console.log(e); 
+    });
+  }
+
+  async getImage(){
+    this.imageWith=[];
+    for(var i=0;i<this.Products.length;i++){
+    await this.home.getImage(this.Products[i]['image']).toPromise()
+      .then(res=>{
+        this.retrieveResonse = res;
+        this.base64Data = this.retrieveResonse.picByte;
+        this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+        this.imageWith.push({
+          "image":this.retrievedImage,
+          "product":this.Products[i]
+        })
+      })
+      .catch(e=>{
+        console.log(e);
+      })
+    }
+
+  }
+
+  onCategory(id){
+    console.log(id);
+    
+    this.getProductByCategory(id);
+  }
+
+  getProductByCategory(id){
+    this.home.getProductByCategory(id).toPromise()
+    .then(res=>{
+      this.Products=res;
+      this.getImage();
     })
     .catch(e=>{
       console.log(e);
       
-    });
-    this.getImage();
-  }
-
-  getImage(){
-    this.home.getImage(1).toPromise()
-    .then(res=>{
-      this.retrieveResonse = res;
-      this.base64Data = this.retrieveResonse.picByte;
-      this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-    })
-    .catch(e=>{
-      console.log(e);
-
     })
   }
 
