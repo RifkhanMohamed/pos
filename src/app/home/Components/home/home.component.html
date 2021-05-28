@@ -36,7 +36,7 @@
                     <div  class="Content-wrapper2" [style.height]="scrHeight" style="overflow-y: scroll;">
                         <div class="row" style="margin: 10px;">
                             <div *ngFor="let product of imageWith" style="padding: 5px;">
-                                <div class="pointer" data-target="#cartModal" data-toggle="modal">
+                                <div class="pointer" data-target="#cartModal" data-toggle="modal" (click)="onCart(product.product.price,product.product.stockInUnit,product.product.productName)">
                                     <!-- <div *ngIf=retrievedImage> -->
                                         <img width="100" height="100" style="border-radius: 50%;" [src]="product.image">
                                     <!-- </div> -->
@@ -44,8 +44,13 @@
                                     <span></span>
                                     <span></span>
                                     <div class="content">
-                                        {{product.product.productName}}
-                                        <br>
+                                        <div *ngIf="product.product.productName.length<=10">
+                                            {{product.product.productName}}
+                                        </div>
+                                        <div id="forSlice" *ngIf="product.product.productName.length>10">
+                                            {{product.product.productName}}...
+                                        </div>
+                                        
                                         <div style="font-size: smaller;">
                                             {{product.product.productCode}}
                                         </div>
@@ -71,36 +76,64 @@
             </div>
         </div>
         <div class="col-4">
-            <div class="Content-wrapper">
-                <div *ngIf="cart.length>0" class="col-sm-6" style="margin-right: auto; margin-left: auto;">
-                    <a   href="https://www.ou.ac.lk">
-                        <img src="../assets/Images/logo_transparent.png" style="display: block;margin-left: auto;margin-right: auto;" class="" alt=""  height="75" width="150"> 
-                    </a>
-                    <div style="margin-top: 100%; opacity: 0.5; ">
-                        Shopping cart is empty
-                    </div>
-                    <div>
-                        <img src="../assets/Images/output-onlinepngtools.png" style="display: block;margin-left: auto;margin-right: auto;opacity: 0.5;" class="" alt=""  height="75" width="150"> 
-                    </div>
-                </div>
-                <div *ngIf="cart.length==0">
-                    <div class="row">
-                        <div class="col-sm-4" style="font-weight: bold;">
-                            Product
-                        </div>
-                        <div class="col-sm-3" style="font-weight: bold;"> 
-                            Quantity
-                        </div>
-                        <div class="col-sm-2">
 
+                    <div class="Content-wrapper" [style.height]="strHeight" style="overflow-y: scroll;">
+                        <div *ngIf="cart.length==0" class="col-sm-6" style="margin-right: auto; margin-left: auto;">
+                            <a   href="https://www.ou.ac.lk">
+                                <img src="../assets/Images/logo_transparent.png" style="display: block;margin-left: auto;margin-right: auto;" class="" alt=""  height="75" width="150"> 
+                            </a>
+                            <div style="margin-top: 100%; opacity: 0.5; text-align: center; ">
+                                Shopping cart is empty
+                            </div>
+                            <div>
+                                <img src="../assets/Images/output-onlinepngtools.png" style="display: block;margin-left: auto;margin-right: auto;opacity: 0.5;" class="" alt=""  height="75" width="150"> 
+                            </div>
                         </div>
-                        <div class="col-sm-3" style="font-weight: bold;">
-                            Price
+                        <div *ngIf="cart.length>0">
+                            <div class="row">
+                                <div class="col-sm-5" style="font-weight: bold;">
+                                    Product
+                                </div>
+                                <div class="col-sm-1" style="font-weight: bold;"> 
+                                    Qty
+                                </div>
+                                <div class="col-sm-1" style="font-weight: bold;">
+                                    Dis
+                                </div>
+                                <div class="col-sm-1">
+        
+                                </div>
+                                <div class="col-sm-4 text-right" style="font-weight: bold;">
+                                    Price
+                                </div>
+                            </div>
+                            <hr>
+                            <div *ngFor="let item of cart">
+                                <div class="row">
+                                    <div class="col-sm-5" >
+                                        {{item.product}}
+                                    </div>
+                                    <div class="col-sm-1" > 
+                                        {{item.quantity}}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        {{item.discount}}%
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <div class="flex">
+                                            <i class="fa fa-edit" style="color: blue;"></i>
+                                            <i class="fa fa-trash" style="color: red;"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 text-right" >
+                                        {{item.price|currency:'LKR':'symbol-narrow'}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                </div>
-            </div>
+
+
         </div>
     </div>
 <!-- </div> -->
@@ -123,12 +156,38 @@
                 </div>
             </div>
         </form> -->
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3" style="font-weight: bold;">Quantity</div>
+            <div class="col-sm-1"><i class="fa fa-minus-circle pointer" style="color: red;" (click)="detectQuantity()"></i></div>
+            <div class="col-sm-3"><input [(ngModel)]="quantity" type="text" class="form-control form-control-sm" (keyup)="onQuantity()"></div>
+            <div class="col-sm-1"><i class="fa fa-plus-circle pointer" style="color: green;" (click)="addQuantity()"></i></div>
+            <div class="col-sm-2"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3" style="font-weight: bold;">Discount</div>
+            <div class="col-sm-1"><i class="fa fa-minus-circle pointer" style="color: red;" (click)="detectDiscount()"></i></div>
+            <div class="col-sm-2"><input [(ngModel)]="discount" type="text" class="form-control form-control-sm" (keyup)="onDiscount()"></div>
+            <div class="col-sm-1" style="font-weight: bold;">%</div>
+            <div class="col-sm-1"><i class="fa fa-plus-circle pointer" style="color: green;" (click)="addDiscount()"></i></div>
+            <div class="col-sm-2"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3" style="font-weight: bold;">Price</div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-3" style="font-weight: bold;">{{price|currency:'LKR':'symbol-narrow'}}</div>
+            <div class="col-sm-3"></div>
+        </div>
     </div>
 
 <!-- Modal Footer -->
     <div class="modal-footer">
         <div class="form-group">
-            <!-- <button class="btn btn-primary" [disabled]="!unitForm.valid" (click)="createNewUnit()">Add New</button> -->
+            <button class="btn btn-primary" (click)="onAddCart()" data-toggle="modal" data-dismiss="modal"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
             &nbsp;<button class="btn btn-secondary" data-toggle="modal" data-dismiss="modal">Exit</button>
         </div>
     </div>

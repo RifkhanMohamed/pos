@@ -14,15 +14,24 @@ export class HomeComponent implements OnInit {
   Products=[];
   scrHeight:any;
   scrWidth:any;
+  strHeight:any;
   retrievedImage: any;
   retrieveResonse:any;
   base64Data: any;
   imageWith=[];
   cart=[];
+  price:any;
+  forUpdatePrice:any;
+  forUpdateQuantityPrice:any;
+  quantity=1;
+  discount=0;
+  maxQuantity:any;
+  product:any;
   @HostListener('window:resize', ['$event'])
    getScreenSize(event?) {
         this.scrHeight = (window.innerHeight-250).toString()+'px';
         this.scrWidth = window.innerWidth;
+        this.strHeight=(window.innerHeight-80).toString()+'px';
         console.log(this.scrHeight, this.scrWidth);
   }
 
@@ -47,9 +56,77 @@ export class HomeComponent implements OnInit {
     });
 
     this.getProducts();
+    var longTxt=document.getElementById("forSlice");
+    console.log(longTxt);
     
   }
 
+  onCart(price,max,product){
+    this.product=product;
+    this.price=price;
+    this.forUpdatePrice=price;
+    this.forUpdateQuantityPrice=price;
+    this.maxQuantity=max;
+    this.quantity=1;
+    this.discount=0;
+  }
+  onAddCart(){
+    this.cart.push({
+      "price":((this.price*this.quantity)-((this.price*this.quantity)*this.discount/100)),
+      "quantity":this.quantity,
+      "product":this.product,
+      "discount":this.discount
+    })
+  }
+  onQuantity(){
+    // if(this.quantity==0){
+    //   this.quantity=1;
+    // }
+    if(this.quantity>this.maxQuantity){
+      this.quantity=this.maxQuantity;
+    }
+  }
+  onDiscount(){
+    if(this.discount>100){
+      this.discount=100;
+    }
+    
+  }
+  detectQuantity(){
+    if(this.quantity>1){
+      this.quantity=this.quantity-1;
+    }
+    else{
+      this.quantity=1;
+    }
+
+  }
+  addQuantity(){
+    if(this.quantity<this.maxQuantity){
+      this.quantity=this.quantity+1;
+    }
+    else{
+      this.quantity=this.maxQuantity;
+    }
+
+  }
+  detectDiscount(){
+    if(this.discount>0){
+      this.discount=this.discount-10;
+    }
+    else{
+      this.discount=0;
+    }
+
+  }
+  addDiscount(){
+    if(this.discount<100){
+      this.discount=this.discount+10;
+    }
+    else{
+      this.discount=100;
+    }
+  }
   async getProducts(){
     await this.productService.getAllProducts().toPromise()
     .then(res=>{
