@@ -177,10 +177,14 @@ export class HomeComponent implements OnInit {
     }
 
   }
-  onCategory(id){
-    console.log(id);
-    
-    this.getProductByCategory(id);
+ async onCategory(id){
+    // this.Products=[];
+    this.getProductByCategory(id); 
+    // while(this.imageWith.findIndex(x=>x.product.category==null)!=-1){
+    //   this.imageWith.splice(this.imageWith.findIndex(x=>x.product.category==null),1);
+    // }
+    // this.imageWith.filter(x=>x.product['category']['cateId']==id).forEach(element=>this.Products.push(element.product));
+    // this.getImage();
   }
   getProductByCategory(id){
     this.home.getProductByCategory(id).toPromise()
