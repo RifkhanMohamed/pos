@@ -27,6 +27,8 @@ export class HomeComponent implements OnInit {
   discount=0;
   maxQuantity:any;
   product:any;
+  subTotal=0;
+  index:any;
   @HostListener('window:resize', ['$event'])
    getScreenSize(event?) {
         this.scrHeight = (window.innerHeight-250).toString()+'px';
@@ -61,22 +63,41 @@ export class HomeComponent implements OnInit {
     
   }
 
-  onCart(price,max,product){
+  onCart(price,max,product,index){
     this.product=product;
     this.price=price;
     this.forUpdatePrice=price;
     this.forUpdateQuantityPrice=price;
     this.maxQuantity=max;
-    this.quantity=1;
     this.discount=0;
+    this.index=index;
+    if(this.maxQuantity==0){
+      this.quantity=0;
+
+    }
+    else{
+      this.quantity=1;
+    }
   }
   onAddCart(){
     this.cart.push({
       "price":((this.price*this.quantity)-((this.price*this.quantity)*this.discount/100)),
       "quantity":this.quantity,
       "product":this.product,
-      "discount":this.discount
-    })
+      "discount":this.discount,
+      "unitPrice":this.price,
+      "index":this.index
+    });
+    this.calculateSubTotal();
+    if(this.imageWith[this.index]['product']['stockInUnit']>0){
+      this.imageWith[this.index]['product']['stockInUnit']=this.maxQuantity-this.quantity;
+    }
+  }
+  calculateSubTotal(){
+    this.subTotal=0;
+    for(var i=0;i<this.cart.length;i++){
+      this.subTotal=this.subTotal+this.cart[i]['price'];
+    }
   }
   onQuantity(){
     // if(this.quantity==0){
@@ -137,7 +158,6 @@ export class HomeComponent implements OnInit {
       console.log(e); 
     });
   }
-
   async getImage(){
     this.imageWith=[];
     for(var i=0;i<this.Products.length;i++){
@@ -157,13 +177,11 @@ export class HomeComponent implements OnInit {
     }
 
   }
-
   onCategory(id){
     console.log(id);
     
     this.getProductByCategory(id);
   }
-
   getProductByCategory(id){
     this.home.getProductByCategory(id).toPromise()
     .then(res=>{
@@ -174,6 +192,13 @@ export class HomeComponent implements OnInit {
       console.log(e);
       
     })
+  }
+  onDelete(i){
+    
+    this.imageWith[this.cart[i]['index']]['product']['stockInUnit']=this.imageWith[this.cart[i]['index']]['product']['stockInUnit']+this.cart[i]['quantity'];
+    this.cart.splice(i,1);
+    this.calculateSubTotal();
+    
   }
 
 }
